@@ -108,5 +108,6 @@ export abstract class Collision extends WordObject {
 	}
 
     protected abstract isEntityValid(entity: number): boolean;
+    protected abstract isEntityInside(entity: number): boolean;
     protected abstract getRevelantEntities(): number[];
 }

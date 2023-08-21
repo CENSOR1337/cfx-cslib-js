@@ -4,7 +4,7 @@ import { randomUUID } from "./utils/uuid";
 import * as cfx from "cfx-client";
 import * as natives from "cfx-natives";
 
-export class Collision extends CollisionBase {
+export abstract class Collision extends CollisionBase {
 	constructor(pos: Vector3) {
 		const id = randomUUID();
 		super(id, pos);
@@ -12,6 +12,7 @@ export class Collision extends CollisionBase {
 
 	protected isEntityValid(entity: number) {
 		if (!natives.doesEntityExist(entity)) return false;
+		if (!this.isEntityInside(entity)) return false;
 		return true;
 	}
 
@@ -36,4 +37,7 @@ export class Collision extends CollisionBase {
 
 		return entities;
 	}
+
+	protected abstract isPositionInside(pos: Vector3): boolean;
+	protected abstract isEntityInside(entity: number): boolean;
 }

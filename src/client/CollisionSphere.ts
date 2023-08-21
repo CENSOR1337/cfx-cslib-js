@@ -9,12 +9,12 @@ export class CollisionSphere extends Collision {
 		this.radius = radius;
 	}
 
-	protected isPosInside(pos: Vector3) {
+	protected isPositionInside(pos: Vector3): boolean {
 		return this.pos.distance(pos) <= this.radius;
 	}
 
 	protected isEntityInside(entity: number) {
 		const position = natives.getEntityCoords(entity, false);
-		return this.isPosInside(position);
+		return this.isPositionInside(position);
 	}
 }
