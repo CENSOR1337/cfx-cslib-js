@@ -77,7 +77,7 @@ export abstract class Collision extends WordObject {
 
 	private onTick() {
 		if (this.destroyed) {
-			//clearInterval(this.interval);
+			clearInterval(this.interval);
 			for (const handle of this.insideEntities) {
 				this.listeners.exit.broadcast(handle);
 			}
