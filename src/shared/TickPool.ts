@@ -5,12 +5,17 @@ class Tickpool {
 	handlers = new Map<number, () => void>();
 	currentId: number;
 	tick: Tick | undefined;
+	private _destroyed: boolean = false;
 
 	constructor() {
 		this.currentId = 0;
 	}
 
-	add(handler: () => void): number {
+	public get destroyed() {
+		return this._destroyed;
+	}
+
+	public add(handler: () => void): number {
 		this.currentId++;
 		this.handlers.set(this.currentId, handler);
 		if (!this.tick) {
@@ -23,16 +28,22 @@ class Tickpool {
 		return this.currentId;
 	}
 
-	remove(id: number) {
+	public remove(id: number) {
 		const handler = this.handlers.get(id);
 		if (!handler) return;
 		this.handlers.delete(id);
 		if (this.handlers.size > 0) return;
-		this.destroy();
+		this.pauseTick();
 	}
 
-	destroy() {
+	private pauseTick() {
 		this.tick?.destroy();
+		this.tick = undefined;
+	}
+
+	public destroy() {
+		this.pauseTick();
+		this._destroyed = true;
 	}
 }
 
