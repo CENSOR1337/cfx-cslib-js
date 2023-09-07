@@ -2,7 +2,7 @@ import { Vector3 } from "cfx-shared";
 import { WordObject } from "./WordObject";
 import { appendInternalNamespace } from "./enum";
 
-const Event = {
+export const VirtualEntityEvent = {
 	onVirtualEntityStreamIn: appendInternalNamespace("onVirtualEntityStreamIn"),
 	onVirtualEntityStreamOut: appendInternalNamespace("onVirtualEntityStreamOut"),
 	onVirtualEntitySyncedMetaChange: appendInternalNamespace("onVirtualEntitySyncedMetaChange"),
@@ -17,16 +17,17 @@ interface veEvent {
 export class VirtualEntity extends WordObject {
 	public static readonly type = "VIRTUAL_ENTITY";
 	public readonly type = "VIRTUAL_ENTITY";
-	public readonly virtualEntityType: string;
+	protected readonly veType: string;
 	public readonly event: veEvent;
 
-	constructor(pos: Vector3, dimension?: number) {
+	constructor(veType: string, pos: Vector3, dimension?: number) {
 		super(pos, dimension);
-		this.virtualEntityType = this.constructor.name;
+		if (!veType) throw new Error("VirtualEntity must have a virtualEntityType");
+        this.veType = veType;
 		this.event = {
-			onVirtualEntityStreamIn: `${Event.onVirtualEntityStreamIn}:${this.virtualEntityType}`,
-			onVirtualEntityStreamOut: `${Event.onVirtualEntityStreamOut}:${this.virtualEntityType}`,
-			onVirtualEntitySyncedMetaChange: `${Event.onVirtualEntitySyncedMetaChange}:${this.virtualEntityType}`,
+			onVirtualEntityStreamIn: `${VirtualEntityEvent.onVirtualEntityStreamIn}:${this.veType}`,
+			onVirtualEntityStreamOut: `${VirtualEntityEvent.onVirtualEntityStreamOut}:${this.veType}`,
+			onVirtualEntitySyncedMetaChange: `${VirtualEntityEvent.onVirtualEntitySyncedMetaChange}:${this.veType}`,
 		};
 	}
 }

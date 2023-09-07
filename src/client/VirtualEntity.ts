@@ -2,6 +2,7 @@ import { Vector3, Event } from "cfx-client";
 import { Resource } from "./Resource";
 import { VirtualEntity as SharedVirtualEntity } from "../shared/VirtualEntity";
 import { Dispatcher } from "../shared/utils/Dispatcher";
+import { VirtualEntityEvent } from "../shared/VirtualEntity";
 
 export class VirtualEntity extends SharedVirtualEntity {
 	public static readonly instances = new Map<string, VirtualEntity>();
@@ -14,8 +15,8 @@ export class VirtualEntity extends SharedVirtualEntity {
 		onStreamOut: new Dispatcher(),
 	};
 
-	protected constructor(id: string, pos: Vector3, syncedMeta: Record<string, any>) {
-		super(pos);
+	protected constructor(veType: string, id: string, pos: Vector3, syncedMeta: Record<string, any>) {
+		super(veType, pos);
 		this.id = id;
 		this.pos = new Vector3(pos.x, pos.y, pos.z);
 		this.syncedMeta = syncedMeta;
@@ -51,17 +52,17 @@ export class VirtualEntity extends SharedVirtualEntity {
 		return VirtualEntity.instances.get(id);
 	}
 
-	public static initialize(classObject: any) {
-		const handlerObject = new classObject("VE_TEMP_INSTANCE", new Vector3(0, 0, 0), {});
-		Resource.onServer(handlerObject.event.onVirtualEntityStreamIn, function (veObject: any) {
+	public static initialize(veType: string, classObject: any) {
+		Resource.onServer(`${VirtualEntityEvent.onVirtualEntityStreamIn}:${veType}`, function (veObject: any) {
 			const id = veObject.id;
 			const pos = veObject.pos;
 			const syncedMeta = veObject.syncedMeta;
 			if (VirtualEntity.instances.get(id)) return;
-			const instance = new classObject(id, pos, syncedMeta);
+			const instance = new classObject(veType, id, pos, syncedMeta);
+            VirtualEntity.instances.set(id, instance);
 		});
 
-		Resource.onServer(handlerObject.event.onVirtualEntityStreamOut, function (veObject: any) {
+		Resource.onServer(`${VirtualEntityEvent.onVirtualEntityStreamOut}:${veType}`, function (veObject: any) {
 			const id = veObject.id;
 			const instance = VirtualEntity.instances.get(id);
 			if (!instance) return;
