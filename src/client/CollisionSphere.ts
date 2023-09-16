@@ -13,7 +13,7 @@ export class CollisionSphere extends Collision {
 		return this.pos.distanceTo(pos) <= this.radius;
 	}
 
-	protected isEntityInside(entity: number) {
+	protected isEntityIn(entity: number) {
 		const position = natives.getEntityCoords(entity, false);
 		return this.isPositionInside(position);
 	}

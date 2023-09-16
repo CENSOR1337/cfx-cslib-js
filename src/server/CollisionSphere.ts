@@ -9,12 +9,12 @@ export class CollisionSphere extends Collision {
 		this.radius = radius;
 	}
 
-	protected isPositionInside(pos: Vector3) {
+	protected isPointIn(pos: Vector3) {
 		return this.pos.distanceTo(pos) <= this.radius;
 	}
 
-	protected isEntityInside(entity: number) {
+	protected isEntityIn(entity: number) {
 		const position = cfx.getEntityCoords(entity);
-		return this.isPositionInside(position);
+		return this.isPointIn(position);
 	}
 }

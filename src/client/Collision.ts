@@ -12,7 +12,7 @@ export abstract class Collision extends CollisionBase {
 
 	protected isEntityValid(entity: number) {
 		if (!natives.doesEntityExist(entity)) return false;
-		if (!this.isEntityInside(entity)) return false;
+		if (!this.isEntityIn(entity)) return false;
 		return true;
 	}
 
@@ -39,5 +39,5 @@ export abstract class Collision extends CollisionBase {
 	}
 
 	protected abstract isPositionInside(pos: Vector3): boolean;
-	protected abstract isEntityInside(entity: number): boolean;
+	protected abstract isEntityIn(entity: number): boolean;
 }

@@ -12,7 +12,7 @@ export abstract class Collision extends CollisionBase {
 
 	protected isEntityValid(entity: number) {
 		if (!cfx.doesEntityExist(entity)) return false;
-		if (!this.isEntityInside(entity)) return false;
+		if (!this.isEntityIn(entity)) return false;
 		if (cfx.getEntityRoutingBucket(entity) != this.dimension) return false;
 		return true;
 	}
@@ -43,6 +43,6 @@ export abstract class Collision extends CollisionBase {
 		return entities;
 	}
 
-	protected abstract isPositionInside(pos: Vector3): boolean;
-	protected abstract isEntityInside(entity: number): boolean;
+	protected abstract isPointIn(pos: Vector3): boolean;
+	protected abstract isEntityIn(entity: number): boolean;
 }
