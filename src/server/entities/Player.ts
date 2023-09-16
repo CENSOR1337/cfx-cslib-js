@@ -1,12 +1,13 @@
+import { Entity } from "./Entity";
 import { Vector3, Event } from "@censor1337/cfx-api/server";
 import * as cfx from "@censor1337/cfx-api/server";
 
-export class Player {
+export class Player extends Entity {
 	public readonly type = "player";
 	public static readonly type = "player";
 	public readonly source: number;
 
-	public static get all(): Player[] {
+	public static get all(): Array<Player> {
 		const players = new Array<Player>();
 		const num = cfx.getNumPlayerIndices();
 		for (let i = 0; i < num; i++) {
@@ -18,7 +19,17 @@ export class Player {
 	}
 
 	constructor(src: number | string) {
-		this.source = Number(src);
+		const source = typeof src === "string" ? Number(src) : src;
+		super(source);
+		this.source = source;
+	}
+
+	/*
+	 * this is override function in Entity class
+	 * this function return player ped handle
+	 */
+	public get handle(): number {
+		return cfx.getPlayerPed(this.sourceStr);
 	}
 
 	public static fromSource(src: number | string): Player {
