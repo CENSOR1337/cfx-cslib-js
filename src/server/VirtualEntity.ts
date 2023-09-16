@@ -22,7 +22,6 @@ export class VirtualEntity extends SharedVirtualEntity {
 		this.collision = collision;
 
 		this.syncedMeta = data || {};
-		//Events.onPlayerDropped(this.onPlayerDisconnected.bind(this));
 		ServerEvent.playerDropped(this.onPlayerDisconnected.bind(this));
 	}
 
