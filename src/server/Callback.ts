@@ -1,4 +1,4 @@
-import { Player } from "./Player";
+import { Player } from "./entities/Player";
 import { randomUUID } from "./utils/uuid";
 import { Event } from "@censor1337/cfx-api/server";
 import { Callback as CallbackShared } from "../shared/Callback";

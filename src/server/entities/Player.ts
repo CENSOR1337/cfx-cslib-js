@@ -17,7 +17,7 @@ export class Player {
 		return players;
 	}
 
-	private constructor(src: number | string) {
+	constructor(src: number | string) {
 		this.source = Number(src);
 	}
 

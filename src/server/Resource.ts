@@ -1,7 +1,7 @@
 import { Resource as sharedResource } from "../shared/Resource";
 import { Event } from "@censor1337/cfx-api/server";
 import { Callback } from "./Callback";
-import { Player } from "./Player";
+import { Player } from "./entities/Player";
 
 class ResourceCallback extends Callback {
 	public static register(eventName: string, handler: (player: Player, ...args: any[]) => void): Event {

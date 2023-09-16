@@ -3,7 +3,7 @@ import { VirtualEntity as SharedVirtualEntity } from "../shared/VirtualEntity";
 import { CollisionSphere } from "./CollisionSphere";
 import { randomUUID } from "./utils/uuid";
 import { Resource } from "./Resource";
-import { Player } from "./Player";
+import { Player } from "./entities/Player";
 import * as cfx from "@censor1337/cfx-api/server";
 
 export class VirtualEntity extends SharedVirtualEntity {
