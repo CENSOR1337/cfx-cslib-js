@@ -1,12 +1,24 @@
 {
 	"name": "@censor1337/cslib",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"scripts": {
 		"build": "tsc",
 		"watch": "tsc --watch"
 	},
 	"author": "CENSOR_1337",
 	"license": "MIT",
+    "files": [
+		"dist"
+	],
+	"keywords": [
+		"fivem",
+		"cfx",
+		"cfx.re"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/CENSOR1337/cfx-cslib-js"
+	},
 	"devDependencies": {
 		"@types/node": "^20.6.2",
 		"typescript": "^5.2.2"
