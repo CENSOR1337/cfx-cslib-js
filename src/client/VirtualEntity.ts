@@ -1,4 +1,4 @@
-import { Vector3, Event } from "cfx-client";
+import { Vector3, Event } from "@censor1337/cfx-api/client";
 import { Resource } from "./Resource";
 import { VirtualEntity as SharedVirtualEntity } from "../shared/VirtualEntity";
 import { Dispatcher } from "../shared/utils/Dispatcher";

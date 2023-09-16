@@ -1,10 +1,10 @@
-import { Vector3, Event, ServerEvent, ServerEventContext } from "cfx-server";
+import { Vector3, Event, ServerEvent, ServerEventContext } from "@censor1337/cfx-api/server";
 import { VirtualEntity as SharedVirtualEntity } from "../shared/VirtualEntity";
 import { CollisionSphere } from "./CollisionSphere";
 import { randomUUID } from "./utils/uuid";
 import { Resource } from "./Resource";
 import { Player } from "./Player";
-import * as cfx from "cfx-server";
+import * as cfx from "@censor1337/cfx-api/server";
 
 export class VirtualEntity extends SharedVirtualEntity {
 	readonly id = randomUUID();

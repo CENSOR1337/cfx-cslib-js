@@ -1,8 +1,8 @@
-import { Vector3 } from "cfx-client";
+import { Vector3 } from "@censor1337/cfx-api/client";
 import { Collision as CollisionBase } from "../shared/Collision";
 import { randomUUID } from "./utils/uuid";
-import * as cfx from "cfx-client";
-import * as natives from "cfx-natives";
+import * as cfx from "@censor1337/cfx-api/client";
+import * as natives from "@censor1337/cfx-core/natives";
 
 export abstract class Collision extends CollisionBase {
 	constructor(pos: Vector3) {

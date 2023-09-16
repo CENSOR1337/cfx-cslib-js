@@ -1,5 +1,5 @@
 import { Resource as sharedResource } from "../shared/Resource";
-import { Event } from "cfx-server";
+import { Event } from "@censor1337/cfx-api/server";
 import { Callback } from "./Callback";
 import { Player } from "./Player";
 

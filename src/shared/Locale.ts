@@ -1,4 +1,4 @@
-import * as cfx from "cfx-shared";
+import * as cfx from "@censor1337/cfx-api/shared";
 import { Resource } from "./Resource";
 const dict = new Map<string, string>();
 class Locale {

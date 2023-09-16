@@ -1,6 +1,6 @@
 import { Collision } from "./Collision";
-import { Vector3 } from "cfx-server";
-import * as cfx from "cfx-server";
+import { Vector3 } from "@censor1337/cfx-api/server";
+import * as cfx from "@censor1337/cfx-api/server";
 
 export class CollisionSphere extends Collision {
 	radius: number;
@@ -10,7 +10,7 @@ export class CollisionSphere extends Collision {
 	}
 
 	protected isPositionInside(pos: Vector3) {
-		return this.pos.distance(pos) <= this.radius;
+		return this.pos.distanceTo(pos) <= this.radius;
 	}
 
 	protected isEntityInside(entity: number) {

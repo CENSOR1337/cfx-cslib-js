@@ -1,11 +1,11 @@
-import { Vector3 } from "cfx-shared";
+import { Vector3 } from "@censor1337/cfx-api/shared";
 import { WordObject } from "./WordObject";
 import { appendInternalNamespace } from "./enum";
 
 export const VirtualEntityEvent = {
-	onVirtualEntityStreamIn: appendInternalNamespace("onVirtualEntityStreamIn"),
-	onVirtualEntityStreamOut: appendInternalNamespace("onVirtualEntityStreamOut"),
-	onVirtualEntitySyncedMetaChange: appendInternalNamespace("onVirtualEntitySyncedMetaChange"),
+	onVirtualEntityStreamIn: appendInternalNamespace("on_ve_stream_in"),
+	onVirtualEntityStreamOut: appendInternalNamespace("on_ve_stream_out"),
+	onVirtualEntitySyncedMetaChange: appendInternalNamespace("on_ve_synced_meta_change"),
 };
 
 interface veEvent {

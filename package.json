@@ -1,8 +1,6 @@
 {
-	"name": "cslib",
-	"main": "dist/index.js",
-	"module": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"name": "@censor1337/cslib",
+	"version": "0.0.1",
 	"scripts": {
 		"build": "tsc",
 		"watch": "tsc --watch"
@@ -10,17 +8,14 @@
 	"author": "CENSOR_1337",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/node": "^20.5.9",
+		"@types/node": "^20.6.2",
 		"typescript": "^5.2.2"
-	},
-	"dependencies": {
-		"cfx-client": "^1.0.4",
-		"cfx-natives": "^1.1.6",
-		"cfx-server": "^1.1.3",
-		"cfx-shared": "^1.0.2"
 	},
 	"exports": {
 		"./client": "./dist/client/index.js",
 		"./server": "./dist/server/index.js"
+	},
+	"dependencies": {
+		"@censor1337/cfx-api": "^0.0.4"
 	}
 }

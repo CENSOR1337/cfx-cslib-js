@@ -1,5 +1,6 @@
 import { randomUUID } from "./utils/uuid";
-import { Event } from "cfx-client";
+import { Event } from "@censor1337/cfx-api/client";
+import * as cfx from "@censor1337/cfx-api/client";
 import { Callback as CallbackShared } from "../shared/Callback";
 
 export class Callback extends CallbackShared {

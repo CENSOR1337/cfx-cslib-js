@@ -1,7 +1,7 @@
-import { Vector3 } from "cfx-client";
+import { Vector3 } from "@censor1337/cfx-api/client";
 import { Dispatcher } from "../shared/utils/Dispatcher";
 import { Streaming } from "./Streaming";
-import * as natives from "cfx-natives";
+import * as natives from "@censor1337/cfx-core/natives";
 
 export enum EntityType {
 	Object = "object",

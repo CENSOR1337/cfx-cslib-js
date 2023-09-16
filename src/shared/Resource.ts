@@ -1,5 +1,5 @@
-import { Event } from "cfx-shared";
-import * as cfx from "cfx-shared";
+import { Event } from "@censor1337/cfx-api/shared";
+import * as cfx from "@censor1337/cfx-api/shared";
 const resourceName = cfx.getCurrentResourceName();
 const isServer = cfx.isDuplicityVersion();
 const isClient = !isServer;

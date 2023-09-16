@@ -1,4 +1,4 @@
-import * as natives from "cfx-natives";
+import * as natives from "@censor1337/cfx-core/natives";
 
 function internalRequest(classObj: any, requestFunction: Function, ...args: any[]): Promise<void> {
 	return new Promise(async (resolve, reject) => {

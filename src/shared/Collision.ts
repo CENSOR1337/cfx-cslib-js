@@ -1,5 +1,5 @@
 import { WordObject } from "./WordObject";
-import { Vector3 } from "cfx-shared";
+import { Vector3 } from "@censor1337/cfx-api/shared";
 import { Dispatcher } from "./utils/Dispatcher";
 import { Tickpool } from "./TickPool";
 
@@ -77,6 +77,7 @@ export abstract class Collision extends WordObject {
 
 	private onTick() {
 		if (this.destroyed) {
+            // @ts-ignore
 			clearInterval(this.interval);
 			for (const handle of this.insideEntities) {
 				this.listeners.exit.broadcast(handle);

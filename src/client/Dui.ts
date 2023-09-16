@@ -1,4 +1,4 @@
-import * as cfx from "cfx-client";
+import * as cfx from "@censor1337/cfx-api/client";
 import { Dispatcher } from ".";
 
 class Dui {

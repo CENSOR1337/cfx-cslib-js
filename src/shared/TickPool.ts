@@ -1,10 +1,10 @@
-import * as cfx from "cfx-shared";
-import { Tick, onTick, clearTick } from "cfx-shared";
+import * as cfx from "@censor1337/cfx-api/shared";
+import { onTick, clearTick } from "@censor1337/cfx-api/shared";
 
 class Tickpool {
 	handlers = new Map<number, () => void>();
 	currentId: number;
-	tick: Tick | undefined;
+	tick: number | undefined;
 	private _destroyed: boolean = false;
 
 	constructor() {
@@ -37,7 +37,7 @@ class Tickpool {
 	}
 
 	private pauseTick() {
-		this.tick?.destroy();
+		if (this.tick) clearTick(this.tick);
 		this.tick = undefined;
 	}
 

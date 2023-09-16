@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 import { randomUUID } from "./utils/uuid";
-import { Event } from "cfx-server";
+import { Event } from "@censor1337/cfx-api/server";
 import { Callback as CallbackShared } from "../shared/Callback";
 
 export class Callback extends CallbackShared {

@@ -1,6 +1,6 @@
 import { Player } from "./Player";
-import { Event as EventShared } from "cfx-server";
-import * as cfx from "cfx-server";
+import { Event as EventShared } from "@censor1337/cfx-api/server";
+import * as cfx from "@censor1337/cfx-api/server";
 
 // export class Events extends EventShared {
 // 	protected static getObjectClass(obj: any): any {

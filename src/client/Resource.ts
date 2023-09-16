@@ -1,5 +1,5 @@
 import { Resource as ResourceShared } from "../shared/Resource";
-import { Event } from "cfx-client";
+import { Event } from "@censor1337/cfx-api/client";
 import { Callback } from "./Callback";
 
 class ResourceCallback extends Callback {

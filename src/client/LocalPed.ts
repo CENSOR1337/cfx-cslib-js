@@ -1,5 +1,5 @@
 import { LocalEntity } from "./LocalEntity";
-import { Vector3 } from "cfx-client";
+import { Vector3 } from "@censor1337/cfx-api/client";
 import { EntityType } from "./LocalEntity";
 
 export class LocalPed extends LocalEntity {

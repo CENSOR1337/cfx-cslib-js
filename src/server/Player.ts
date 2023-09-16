@@ -1,5 +1,5 @@
-import { Vector3, Event } from "cfx-server";
-import * as cfx from "cfx-server";
+import { Vector3, Event } from "@censor1337/cfx-api/server";
+import * as cfx from "@censor1337/cfx-api/server";
 
 export class Player {
 	public readonly type = "player";
