@@ -69,14 +69,6 @@ export class Player extends Entity {
 		return cfx.getPlayerPing(this.sourceStr);
 	}
 
-	public get pos(): Vector3 {
-		return cfx.getEntityCoords(this.ped);
-	}
-
-	public get rot(): Vector3 {
-		return cfx.getEntityRotation(this.ped);
-	}
-
 	public get isMuted(): boolean {
 		return cfx.mumbleIsPlayerMuted(this.source);
 	}
