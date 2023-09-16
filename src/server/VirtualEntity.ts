@@ -11,7 +11,6 @@ export class VirtualEntity extends SharedVirtualEntity {
 	readonly collision: CollisionSphere;
 	readonly streamingPlayers: Set<number> = new Set();
 	readonly syncedMeta: Record<string, any>;
-	_dimension: number = 0;
 
 	constructor(veType: string, position: Vector3, streamingDistance: number, data?: Record<string, any>) {
 		super(veType, position);
@@ -27,15 +26,6 @@ export class VirtualEntity extends SharedVirtualEntity {
 
 	public destroy() {
 		this.collision.destroy();
-	}
-
-	public get dimension(): number {
-		return this._dimension;
-	}
-
-	public set dimension(value: number) {
-		this._dimension = value;
-		this.collision.dimension = value;
 	}
 
 	public setSyncedMeta(key: string, value: any) {
