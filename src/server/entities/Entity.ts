@@ -1,18 +1,9 @@
+import { Entity as EntityBase } from "../../shared/entities/Entity";
 import * as cfx from "@censor1337/cfx-api/server";
 import { Vector3 } from "@censor1337/cfx-api/server";
 import { Player } from "..";
 
-export abstract class Entity {
-	public readonly _handle: number;
-
-	protected constructor(handle: number) {
-		this._handle = handle;
-	}
-
-	public get handle(): number {
-		return this.handle;
-	}
-
+export abstract class Entity extends EntityBase {
 	public get valid(): boolean {
 		return cfx.doesEntityExist(this.handle);
 	}
