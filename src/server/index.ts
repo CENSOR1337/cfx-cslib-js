@@ -1,6 +1,6 @@
 export * from "../shared/";
 export { randomUUID } from "./utils/uuid";
-export { Player } from "./entities/Player";
+export { Player, Entity, Vehicle, Ped, Prop } from "./entities";
 export { VirtualEntity } from "./VirtualEntity";
 export { Collision } from "./Collision";
 export { CollisionSphere } from "./CollisionSphere";
