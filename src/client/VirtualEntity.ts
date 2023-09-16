@@ -59,7 +59,7 @@ export class VirtualEntity extends SharedVirtualEntity {
 			const syncedMeta = veObject.syncedMeta;
 			if (VirtualEntity.instances.get(id)) return;
 			const instance = new classObject(veType, id, pos, syncedMeta);
-            VirtualEntity.instances.set(id, instance);
+			VirtualEntity.instances.set(id, instance);
 		});
 
 		Resource.onServer(`${VirtualEntityEvent.onVirtualEntityStreamOut}:${veType}`, function (veObject: any) {

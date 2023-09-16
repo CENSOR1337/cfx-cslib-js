@@ -62,7 +62,7 @@ export abstract class Collision extends WordObject {
 	public off(listener: listenerType) {
 		const dispatcher = this.listeners[listener.type];
 		if (!dispatcher) return;
-        if (listener.id === undefined) return;
+		if (listener.id === undefined) return;
 		dispatcher.remove(listener.id);
 	}
 
@@ -77,7 +77,7 @@ export abstract class Collision extends WordObject {
 
 	private onTick() {
 		if (this.destroyed) {
-            // @ts-ignore
+			// @ts-ignore
 			clearInterval(this.interval);
 			for (const handle of this.insideEntities) {
 				this.listeners.exit.broadcast(handle);
@@ -108,7 +108,7 @@ export abstract class Collision extends WordObject {
 		}
 	}
 
-    protected abstract isEntityValid(entity: number): boolean;
-    protected abstract isEntityInside(entity: number): boolean;
-    protected abstract getRevelantEntities(): number[];
+	protected abstract isEntityValid(entity: number): boolean;
+	protected abstract isEntityInside(entity: number): boolean;
+	protected abstract getRevelantEntities(): number[];
 }

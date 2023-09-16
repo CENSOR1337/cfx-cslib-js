@@ -23,7 +23,7 @@ export class VirtualEntity extends WordObject {
 	constructor(veType: string, pos: Vector3, dimension?: number) {
 		super(pos, dimension);
 		if (!veType) throw new Error("VirtualEntity must have a virtualEntityType");
-        this.veType = veType;
+		this.veType = veType;
 		this.event = {
 			onVirtualEntityStreamIn: `${VirtualEntityEvent.onVirtualEntityStreamIn}:${this.veType}`,
 			onVirtualEntityStreamOut: `${VirtualEntityEvent.onVirtualEntityStreamOut}:${this.veType}`,
