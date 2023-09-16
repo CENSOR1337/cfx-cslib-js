@@ -1,7 +1,7 @@
 import { randomUUID } from "./utils/uuid";
 import { Vector3 } from "@censor1337/cfx-api/server";
 import { Collision as CollisionBase } from "../shared/Collision";
-import { Player } from "./Player";
+import { Player } from "./entities/Player";
 import * as cfx from "@censor1337/cfx-api/server";
 
 export abstract class Collision extends CollisionBase {
