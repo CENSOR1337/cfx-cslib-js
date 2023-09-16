@@ -2,7 +2,7 @@ import * as cfx from "@censor1337/cfx-api/server";
 import { Entity } from "./Entity";
 
 export class Prop extends Entity {
-	public static all(): Array<Prop> {
+	public static get all(): Array<Prop> {
 		const gameProps = cfx.getAllObjects();
 		const props = new Array<Prop>();
 
