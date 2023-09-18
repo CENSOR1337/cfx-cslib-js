@@ -1,4 +1,4 @@
-import { Entity as EntityBase } from "../../shared/entities/Entity";
+import { Entity as EntityBase } from "../../shared/entities";
 import * as cfx from "@censor1337/cfx-api/server";
 import { Vector3 } from "@censor1337/cfx-api/server";
 import { Player } from "..";
