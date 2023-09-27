@@ -9,11 +9,11 @@ export class CollisionSphere extends Collision {
 		this.radius = radius;
 	}
 
-	protected isPointIn(pos: Vector3): boolean {
+	public isPointIn(pos: Vector3): boolean {
 		return this.pos.distanceTo(pos) <= this.radius;
 	}
 
-	protected isEntityIn(entity: number) {
+	public isEntityIn(entity: number) {
 		const position = natives.getEntityCoords(entity, false);
 		return this.isPointIn(position);
 	}

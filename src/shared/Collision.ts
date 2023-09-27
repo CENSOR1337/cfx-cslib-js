@@ -109,6 +109,7 @@ export abstract class Collision extends WordObject {
 	}
 
 	protected abstract isEntityValid(entity: number): boolean;
-	protected abstract isEntityIn(entity: number): boolean;
 	protected abstract getRevelantEntities(): number[];
+	public abstract isEntityIn(entity: number): boolean;
+	public abstract isPointIn(pos: Vector3): boolean;
 }

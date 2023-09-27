@@ -43,6 +43,6 @@ export abstract class Collision extends CollisionBase {
 		return entities;
 	}
 
-	protected abstract isPointIn(pos: Vector3): boolean;
-	protected abstract isEntityIn(entity: number): boolean;
+	public abstract isPointIn(pos: Vector3): boolean;
+	public abstract isEntityIn(entity: number): boolean;
 }
