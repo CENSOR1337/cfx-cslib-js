@@ -1,7 +1,7 @@
-import { WordObject } from "./WordObject";
+import { WordObject } from "../WordObject";
 import { Vector3 } from "@censor1337/cfx-api/shared";
-import { Dispatcher } from "./utils/Dispatcher";
-import { Tickpool } from "./TickPool";
+import { Dispatcher } from "../utils/Dispatcher";
+import { Tickpool } from "../TickPool";
 
 interface listenerType {
 	id: number | undefined;

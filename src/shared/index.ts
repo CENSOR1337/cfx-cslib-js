@@ -1,5 +1,5 @@
 export { Resource } from "./Resource";
-export { Collision } from "./Collision";
+export { Collision } from "./collision/Collision";
 export { Callback } from "./Callback";
 export { VirtualEntity } from "./VirtualEntity";
 export { WordObject } from "./WordObject";

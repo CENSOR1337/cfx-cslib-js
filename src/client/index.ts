@@ -1,8 +1,8 @@
 export * from "../shared/";
 export { randomUUID } from "./utils/uuid";
 export { Callback } from "./Callback";
-export { Collision } from "./Collision";
-export { CollisionSphere } from "./CollisionSphere";
+export { Collision } from "./collision/Collision";
+export { CollisionSphere } from "./collision/CollisionSphere";
 export { Resource } from "./Resource";
 export { Streaming } from "./Streaming";
 export { LocalObject } from "./LocalObject";
