@@ -10,6 +10,10 @@ class Dispatcher {
 		return this.listenerId;
 	}
 
+	public get size() {
+        return this.listeners.size;
+    }
+
 	public remove(id: number) {
 		if (this._destroyed) return;
 		this.listeners.delete(id);
