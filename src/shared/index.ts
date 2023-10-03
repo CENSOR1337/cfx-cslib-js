@@ -6,4 +6,4 @@ export { WordObject } from "./WordObject";
 export { Dispatcher } from "./utils/Dispatcher";
 export { Locale } from "./Locale";
 export { Entity } from "./entities";
-export { Shape, ShapeCircle, ShapeSphere, ShapePolygon } from "./Shape";
+export { Shape, ShapeCircle, ShapeSphere, ShapeCylinder, ShapePolygon } from "./Shape";

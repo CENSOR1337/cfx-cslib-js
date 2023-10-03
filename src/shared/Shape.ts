@@ -8,3 +8,4 @@ export { Shape };
 export { ShapeCircle } from "./shapes/Circle";
 export { ShapeSphere } from "./shapes/Sphere";
 export { ShapePolygon } from "./shapes/Polygon";
+export { ShapeCylinder } from "./shapes/Cylinder";
