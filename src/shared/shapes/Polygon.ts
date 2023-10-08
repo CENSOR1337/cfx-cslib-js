@@ -19,7 +19,7 @@ class ShapePolygon implements Shape {
 		this.minZ = minZ;
 		this.maxZ = maxZ;
 		this.points = points;
-		this.pos = new Vector3(vec.x / points.length, vec.y / points.length, 0);
+		this.pos = new Vector3(vec.x / points.length, vec.y / points.length, (minZ + maxZ) / 2);
 	}
 
 	public isPointIn(pos: Vector3) {
