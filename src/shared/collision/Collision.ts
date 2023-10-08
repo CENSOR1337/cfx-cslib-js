@@ -2,6 +2,7 @@ import { WordObject } from "../WordObject";
 import { Vector3 } from "@censor1337/cfx-api/shared";
 import { Dispatcher } from "../utils/Dispatcher";
 import { Tickpool } from "../TickPool";
+import { Shape } from "../Shape";
 
 interface listenerType {
 	id: number | undefined;
@@ -22,9 +23,11 @@ export abstract class Collision extends WordObject {
 	};
 	private tickpool = new Tickpool();
 	private tickpoolIds = new Map<number, number>();
+	private shape: Shape;
 
-	protected constructor(id: string, pos: Vector3) {
-		super(pos);
+	protected constructor(id: string, shape: Shape) {
+		super(shape.pos);
+		this.shape = shape;
 		this.id = id;
 		this.interval = setInterval(this.onTick.bind(this), 300);
 		Collision.all.push(this);
@@ -110,6 +113,7 @@ export abstract class Collision extends WordObject {
 
 	protected abstract isEntityValid(entity: number): boolean;
 	protected abstract getRevelantEntities(): number[];
-	public abstract isEntityIn(entity: number): boolean;
-	public abstract isPointIn(pos: Vector3): boolean;
+	public isPointIn(pos: Vector3): boolean {
+		return this.shape.isPointIn(pos);
+	}
 }

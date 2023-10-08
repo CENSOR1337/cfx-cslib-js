@@ -1,13 +1,14 @@
 import { Vector3 } from "@censor1337/cfx-api/client";
 import { Collision as CollisionBase } from "../../shared";
 import { randomUUID } from "../utils/uuid";
+import { Shape } from "../../shared";
 import * as cfx from "@censor1337/cfx-api/client";
 import * as natives from "@censor1337/cfx-core/natives";
 
-export abstract class Collision extends CollisionBase {
-	constructor(pos: Vector3) {
+export class Collision extends CollisionBase {
+	constructor(shape: Shape) {
 		const id = randomUUID();
-		super(id, pos);
+		super(id, shape);
 	}
 
 	protected isEntityValid(entity: number) {
@@ -38,6 +39,8 @@ export abstract class Collision extends CollisionBase {
 		return entities;
 	}
 
-	public abstract isPointIn(pos: Vector3): boolean;
-	public abstract isEntityIn(entity: number): boolean;
+	public isEntityIn(entity: number): boolean {
+		const position = natives.getEntityCoords(entity, false);
+		return this.isPointIn(position);
+	}
 }
