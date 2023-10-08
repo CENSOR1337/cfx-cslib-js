@@ -3,9 +3,16 @@ import { Shape } from "../Shape";
 
 class ShapePolygon implements Shape {
 	public readonly points: ReadonlyArray<Vector2>;
-
+	public readonly pos: Vector3;
 	constructor(points: Vector2[]) {
+		// Calculate the center of the polygon
+		let vec = new Vector2(0, 0);
+		for (const point of points) {
+			vec = vec.add(point);
+		}
+
 		this.points = points;
+		this.pos = new Vector3(vec.x / points.length, vec.y / points.length, 0);
 	}
 
 	public isPointIn(pos: Vector3) {

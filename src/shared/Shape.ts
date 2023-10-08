@@ -2,6 +2,7 @@ import { Vector3 } from "@censor1337/cfx-core/shared";
 
 interface Shape {
 	isPointIn(pos: Vector3): boolean;
+	readonly pos: Vector3;
 }
 
 export { Shape };

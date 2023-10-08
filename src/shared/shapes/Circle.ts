@@ -4,10 +4,12 @@ import { Shape } from "../Shape";
 class ShapeCircle implements Shape {
 	public readonly point: Vector2;
 	public readonly radius: number;
+	public readonly pos: Vector3;
 
 	constructor(point: Vector2, radius: number) {
 		this.point = point;
 		this.radius = radius;
+		this.pos = new Vector3(point.x, point.y, 0);
 	}
 
 	public isPointIn(pos: Vector2): boolean;
