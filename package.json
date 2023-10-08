@@ -20,7 +20,7 @@
 		"url": "https://github.com/CENSOR1337/cfx-cslib-js"
 	},
 	"devDependencies": {
-		"@types/node": "^20.7.0",
+		"@types/node": "^20.8.3",
 		"typescript": "^5.2.2"
 	},
 	"exports": {
@@ -28,6 +28,6 @@
 		"./server": "./dist/server/index.js"
 	},
 	"dependencies": {
-		"@censor1337/cfx-api": "^0.1.0"
+		"@censor1337/cfx-api": "^0.1.3"
 	}
 }
