@@ -2,21 +2,30 @@ import { Vector2, Vector3 } from "@censor1337/cfx-core/shared";
 import { Shape } from "../Shape";
 
 class ShapePolygon implements Shape {
+	public readonly minZ: number;
+	public readonly maxZ: number;
 	public readonly points: ReadonlyArray<Vector2>;
 	public readonly pos: Vector3;
-	constructor(points: Vector2[]) {
+
+	constructor(minZ: number, maxZ: number, points: Vector2[]) {
+		if (points.length < 3) throw new Error("Polygon must have at least 3 points");
+
 		// Calculate the center of the polygon
 		let vec = new Vector2(0, 0);
 		for (const point of points) {
 			vec = vec.add(point);
 		}
 
+		this.minZ = minZ;
+		this.maxZ = maxZ;
 		this.points = points;
 		this.pos = new Vector3(vec.x / points.length, vec.y / points.length, 0);
 	}
 
 	public isPointIn(pos: Vector3) {
 		let inside = false;
+
+		if (pos.z < this.minZ || pos.z > this.maxZ) return inside;
 
 		const points = this.points;
 		for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
