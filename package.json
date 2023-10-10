@@ -1,6 +1,6 @@
 {
 	"name": "@censor1337/cslib",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"scripts": {
 		"build": "tsc",
 		"watch": "tsc --watch"
