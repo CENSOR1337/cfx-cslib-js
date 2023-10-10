@@ -10,7 +10,7 @@ export class Callback extends CallbackShared {
 				resolve(data as T);
 			});
 		});
-		Event.emit(`${this.clientNamespace}:${eventName}`, source, cbId, ...args);
+		Event.emitClient(`${this.clientNamespace}:${eventName}`, source, cbId, ...args);
 		return promise;
 	}
 
