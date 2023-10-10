@@ -1,15 +1,14 @@
 import { Resource as sharedResource } from "../shared/Resource";
 import { Event } from "@censor1337/cfx-api/server";
 import { Callback } from "./Callback";
-import { Player } from "./entities/Player";
 
 class ResourceCallback extends Callback {
-	public static register(eventName: string, handler: (player: Player, ...args: any[]) => void): Event {
+	public static register(eventName: string, handler: (source: number, ...args: any[]) => void): Event {
 		return super.register(Resource.getEventName(eventName), handler);
 	}
 
-	public static emit<T>(eventName: string, player: Player, ...args: any[]): Promise<T> {
-		return super.emit(Resource.getEventName(eventName), player, ...args);
+	public static emit<T>(eventName: string, source: number, ...args: any[]): Promise<T> {
+		return super.emit(Resource.getEventName(eventName), source, ...args);
 	}
 }
 
