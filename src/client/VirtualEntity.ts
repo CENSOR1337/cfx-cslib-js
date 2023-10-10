@@ -20,7 +20,7 @@ export class VirtualEntity extends SharedVirtualEntity {
 		this.id = id;
 		this.pos = new Vector3(pos.x, pos.y, pos.z);
 		this.syncedMeta = syncedMeta;
-		this.events.push(Resource.onServer(this.event.onVirtualEntitySyncedMetaChange, this.onSyncedMetaChange.bind(this)));
+		this.events.push(Resource.onServer(this.event.onVirtualEntitySyncedMetaChange, this.updateSyncedMeta.bind(this)));
 		if (id == "VE_TEMP_INSTANCE") return;
 		VirtualEntity.instances.set(this.id, this);
 		Resource.onResourceStop(this.destroy.bind(this));
@@ -31,13 +31,16 @@ export class VirtualEntity extends SharedVirtualEntity {
 
 	protected onStreamOut() {} // implement this in your class
 
+    protected onSyncedMetaChange(key: string, value: any) {} // implement this in your class
+
 	public getSyncedMeta(key: string): any {
 		return this.syncedMeta[key];
 	}
 
-	private onSyncedMetaChange(id: string, key: string, value: any) {
+	private updateSyncedMeta(id: string, key: string, value: any) {
 		if (id !== this.id) return;
 		this.syncedMeta[key] = value;
+        this.onSyncedMetaChange(key, value);
 	}
 
 	public destroy() {
