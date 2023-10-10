@@ -16,7 +16,7 @@ export class Callback extends CallbackShared {
 
 	public static register(eventName: string, handler: (source: number, ...args: any[]) => void): Event {
 		return Event.onClient(`${this.serverNamespace}:${eventName}`, (source: number, cbId: string, ...args: any[]) => {
-			Event.emit(cbId, handler(source, ...args));
+			Event.emitClient(cbId, source, handler(source, ...args));
 		});
 	}
 }
