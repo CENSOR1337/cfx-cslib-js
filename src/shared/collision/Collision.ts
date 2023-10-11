@@ -3,6 +3,7 @@ import { Vector3 } from "@censor1337/cfx-api/shared";
 import { Dispatcher } from "../utils/Dispatcher";
 import { Tickpool } from "../TickPool";
 import { Shape } from "../Shape";
+import { Timer, setInterval, clearInterval, everyTick, clearTick } from "@censor1337/cfx-api/shared";
 
 interface listenerType {
 	id: number | undefined;
@@ -13,7 +14,7 @@ export abstract class Collision extends WordObject {
 	public static readonly all = new Array<Collision>();
 	public playersOnly: boolean = false;
 	public readonly id: string;
-	private interval: NodeJS.Timer;
+	private interval: Timer;
 	private insideEntities: Set<number> = new Set();
 	private destroyed: boolean = false;
 	private listeners = {
@@ -80,7 +81,6 @@ export abstract class Collision extends WordObject {
 
 	private onTick() {
 		if (this.destroyed) {
-			// @ts-ignore
 			clearInterval(this.interval);
 			for (const handle of this.insideEntities) {
 				this.listeners.exit.broadcast(handle);
