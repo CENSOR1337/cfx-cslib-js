@@ -1,10 +1,10 @@
 import * as cfx from "@censor1337/cfx-api/shared";
-import { onTick, clearTick } from "@censor1337/cfx-api/shared";
+import { Timer, onTick, clearTick } from "@censor1337/cfx-api/shared";
 
 class Tickpool {
 	handlers = new Map<number, () => void>();
 	currentId: number;
-	tick: number | undefined;
+	tick: Timer | undefined;
 	private _destroyed: boolean = false;
 
 	constructor() {
