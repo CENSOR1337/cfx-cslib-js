@@ -2,7 +2,7 @@ import { WordObject } from "../WordObject";
 import { Vector3 } from "@censor1337/cfx-api/shared";
 import { Dispatcher } from "../utils/Dispatcher";
 import { Shape } from "../Shape";
-import { Timer, setInterval, clearInterval, everyTick, clearTick } from "@censor1337/cfx-api/shared";
+import { Timer, setTimeout, setInterval, clearInterval, everyTick, clearTick } from "@censor1337/cfx-api/shared";
 
 interface listenerType {
 	id: number | undefined;
@@ -29,6 +29,7 @@ export abstract class Collision extends WordObject {
 		this.shape = shape;
 		this.id = id;
 		this.interval = setInterval(this.onTick.bind(this), 300);
+		setTimeout(this.onTick.bind(this));
 		Collision.all.push(this);
 	}
 
