@@ -57,7 +57,7 @@ export abstract class Collision extends WordObject {
 		return { id: id, type: "overlapping" };
 	}
 
-	public onEndOverlap(callback: (entity: number) => void) {
+	public onEndOverlap(callback: (entity: number) => void): listenerType {
 		const id = this.listeners.exit.add(callback);
 		return { id: id, type: "exit" };
 	}
