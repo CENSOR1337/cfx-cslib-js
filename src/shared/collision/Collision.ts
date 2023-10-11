@@ -1,7 +1,6 @@
 import { WordObject } from "../WordObject";
 import { Vector3 } from "@censor1337/cfx-api/shared";
 import { Dispatcher } from "../utils/Dispatcher";
-import { Tickpool } from "../TickPool";
 import { Shape } from "../Shape";
 import { Timer, setInterval, clearInterval, everyTick, clearTick } from "@censor1337/cfx-api/shared";
 
@@ -22,9 +21,8 @@ export abstract class Collision extends WordObject {
 		exit: new Dispatcher(),
 		overlapping: new Dispatcher(),
 	};
-	private tickpool = new Tickpool();
-	private tickpoolIds = new Map<number, number>();
 	private shape: Shape;
+	private overlapTick: Timer | undefined;
 
 	protected constructor(id: string, shape: Shape) {
 		super(shape.pos);
@@ -32,20 +30,6 @@ export abstract class Collision extends WordObject {
 		this.id = id;
 		this.interval = setInterval(this.onTick.bind(this), 300);
 		Collision.all.push(this);
-
-		this.onBeginOverlap((entity) => {
-			const poolId = this.tickpool.add(() => {
-				this.listeners.overlapping.broadcast(entity);
-			});
-			this.tickpoolIds.set(entity, poolId);
-		});
-
-		this.onEndOverlap((entity) => {
-			const poolId = this.tickpoolIds.get(entity);
-			if (!poolId) return;
-			this.tickpool.remove(poolId);
-			this.tickpoolIds.delete(entity);
-		});
 	}
 
 	public onBeginOverlap(callback: (entity: number) => void): listenerType {
@@ -55,6 +39,16 @@ export abstract class Collision extends WordObject {
 
 	public onOverlapping(callback: (entity: number) => void): listenerType {
 		const id = this.listeners.overlapping.add(callback);
+
+		// start tick if not already started
+		if (!this.overlapTick) {
+			this.overlapTick = everyTick(() => {
+				for (const handle of this.insideEntities) {
+					this.listeners.overlapping.broadcast(handle);
+				}
+			});
+		}
+
 		return { id: id, type: "overlapping" };
 	}
 
@@ -68,12 +62,17 @@ export abstract class Collision extends WordObject {
 		if (!dispatcher) return;
 		if (listener.id === undefined) return;
 		dispatcher.remove(listener.id);
+
+		// clear tick if no more overlapping listeners
+		if (listener.type !== "overlapping") return;
+		if (this.listeners.overlapping.size > 0) return;
+		if (!this.overlapTick) return;
+		clearTick(this.overlapTick);
 	}
 
 	public destroy() {
 		this.destroyed = true;
 		this.onTick();
-		this.tickpool.destroy();
 		const index = Collision.all.indexOf(this);
 		if (index < 0) return;
 		Collision.all.splice(index, 1);
