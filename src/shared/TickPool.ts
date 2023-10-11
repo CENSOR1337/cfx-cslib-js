@@ -20,9 +20,9 @@ class Tickpool {
 		this.handlers.set(this.currentId, handler);
 		if (!this.tick) {
 			this.tick = onTick(() => {
-				this.handlers.forEach((handler) => {
+				for (const [id, handler] of this.handlers) {
 					handler();
-				});
+				}
 			});
 		}
 		return this.currentId;
