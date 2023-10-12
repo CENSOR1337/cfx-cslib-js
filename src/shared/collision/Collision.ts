@@ -97,8 +97,8 @@ export abstract class Collision extends WordObject {
 			isPendingDelete = !isRelevant;
 
 			if (!isPendingDelete) {
-				const isValid = this.isEntityValid(handle);
-				isPendingDelete = !isValid;
+				const isInside = this.isEntityIn(handle);
+				isPendingDelete = !isInside;
 			}
 
 			if (isPendingDelete) {
@@ -109,17 +109,12 @@ export abstract class Collision extends WordObject {
 
 		for (const handle of entities) {
 			if (this.insideEntities.has(handle)) continue;
-			const isValid = this.isEntityValid(handle);
-			if (isValid) {
-				if (!this.insideEntities.has(handle)) {
-					this.insideEntities.add(handle);
-					this.listeners.enter.broadcast(handle);
-				}
-			}
+			this.insideEntities.add(handle);
+			this.listeners.enter.broadcast(handle);
 		}
 	}
 
-	protected abstract isEntityValid(entity: number): boolean;
+	public abstract isEntityIn(entity: number): boolean;
 	protected abstract getRevelantEntities(): number[];
 	public isPointIn(pos: Vector3): boolean {
 		return this.shape.isPointIn(pos);
