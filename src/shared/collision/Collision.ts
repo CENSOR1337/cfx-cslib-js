@@ -92,8 +92,16 @@ export abstract class Collision extends WordObject {
 		const entities = this.getRevelantEntities();
 
 		for (const handle of this.insideEntities) {
-			const isValid = this.isEntityValid(handle);
-			if (!isValid) {
+			let isPendingDelete = false;
+			const isRelevant = entities.includes(handle);
+			isPendingDelete = !isRelevant;
+
+			if (!isPendingDelete) {
+				const isValid = this.isEntityValid(handle);
+				isPendingDelete = !isValid;
+			}
+
+			if (isPendingDelete) {
 				this.insideEntities.delete(handle);
 				this.listeners.exit.broadcast(handle);
 			}

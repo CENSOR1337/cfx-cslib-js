@@ -12,7 +12,6 @@ export class Collision extends CollisionBase {
 	}
 
 	protected isEntityValid(entity: number) {
-		if (!cfx.doesEntityExist(entity)) return false;
 		if (!this.isEntityIn(entity)) return false;
 		if (cfx.getEntityRoutingBucket(entity) != this.dimension) return false;
 		return true;

@@ -12,7 +12,6 @@ export class Collision extends CollisionBase {
 	}
 
 	protected isEntityValid(entity: number) {
-		if (!natives.doesEntityExist(entity)) return false;
 		if (!this.isEntityIn(entity)) return false;
 		return true;
 	}
