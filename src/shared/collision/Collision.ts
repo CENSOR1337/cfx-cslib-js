@@ -29,7 +29,7 @@ export abstract class Collision extends WordObject {
 		super(shape.pos);
 		this.shape = shape;
 		this.id = id;
-		this.interval = setInterval(this.onTick.bind(this), isServer ? 1000 : 300);
+		this.interval = setInterval(this.onTick.bind(this), isServer ? 500 : 250);
 		setTimeout(this.onTick.bind(this));
 		Collision.all.push(this);
 	}
