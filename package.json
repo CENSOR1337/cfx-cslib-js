@@ -28,6 +28,7 @@
 		"./server": "./dist/server/index.js"
 	},
 	"dependencies": {
-		"@censor1337/cfx-api": "^0.2.1"
+		"@censor1337/cfx-api": "^0.2.1",
+		"@censor1337/cfx-core": "^0.1.0"
 	}
 }
