@@ -22,7 +22,7 @@ export abstract class Collision extends WordObject {
 		exit: new Dispatcher(),
 		overlapping: new Dispatcher(),
 	};
-	private shape: Shape;
+	protected readonly shape: Shape;
 	private overlapTick: Timer | undefined;
 
 	protected constructor(id: string, shape: Shape) {
