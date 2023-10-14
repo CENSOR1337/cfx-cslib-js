@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
         "target": "es2020",
-        "module": "Node16",
-        "moduleResolution": "Node16",
+        "module": "es2020",
+        "moduleResolution": "Bundler",
         "lib": [
-            "es2021"
+            "es2020"
         ],
         "types": [
             "@types/node"
