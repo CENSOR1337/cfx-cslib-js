@@ -1,6 +1,6 @@
 {
 	"name": "@censor1337/cslib",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"scripts": {
 		"build": "tsc",
 		"watch": "tsc --watch"
@@ -20,7 +20,7 @@
 		"url": "https://github.com/CENSOR1337/cfx-cslib-js"
 	},
 	"devDependencies": {
-		"@types/node": "^20.8.4",
+		"@types/node": "^20.8.6",
 		"typescript": "^5.2.2"
 	},
 	"exports": {
@@ -28,7 +28,7 @@
 		"./server": "./dist/server/index.js"
 	},
 	"dependencies": {
-		"@censor1337/cfx-api": "^0.2.1",
-		"@censor1337/cfx-core": "^0.1.0"
+		"@censor1337/cfx-api": "^0.2.3",
+		"@censor1337/cfx-core": "^0.1.1"
 	}
 }
