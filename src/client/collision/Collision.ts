@@ -35,7 +35,7 @@ export class Collision extends CollisionBase {
 			entities.push(...peds);
 		}
 
-		return entities.filter((entity) => this.isEntityValid(entity));
+		return entities;
 	}
 
 	public isEntityIn(entity: number): boolean {
