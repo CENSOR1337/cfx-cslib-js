@@ -1,9 +1,9 @@
-class Dispatcher {
+class Dispatcher<Args extends any[]> {
 	private listenerId = 0;
-	private listeners: Map<number, (...args: any[]) => void> = new Map();
+	private listeners: Map<number, (...args: Args) => void> = new Map();
 	private _destroyed = false;
 
-	public add(listener: (...args: any[]) => void): number | undefined {
+	public add(listener: (...args: Args) => void): number | undefined {
 		if (this._destroyed) return undefined;
 		this.listenerId++;
 		this.listeners.set(this.listenerId, listener);
@@ -11,15 +11,15 @@ class Dispatcher {
 	}
 
 	public get size() {
-        return this.listeners.size;
-    }
+		return this.listeners.size;
+	}
 
 	public remove(id: number) {
 		if (this._destroyed) return;
 		this.listeners.delete(id);
 	}
 
-	public broadcast(...args: any[]) {
+	public broadcast(...args: Args) {
 		if (this._destroyed) return;
 		this.listeners.forEach((listener) => {
 			listener(...args);
