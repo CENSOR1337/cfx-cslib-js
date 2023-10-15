@@ -103,7 +103,4 @@ export abstract class Collision extends WordObject {
 	public isPointIn(pos: Vector3): boolean {
 		return this.shape.isPointIn(pos);
 	}
-
-	public abstract isEntityIn(entity: number): boolean;
-	protected abstract getRevelantEntities(): number[];
 }

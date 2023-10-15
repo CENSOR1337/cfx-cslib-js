@@ -11,7 +11,7 @@ let interval: Timer | undefined;
 
 const entityDispatcher = new Dispatcher<[number, number, Vector3, string]>();
 
-function entityLoop() {
+function processEntities() {
 	const playersOnly = Collision.all.every((collision) => collision.playersOnly);
 	const entities = new Array<{ handle: number; type: string }>();
 
@@ -61,44 +61,7 @@ export class Collision extends CollisionBase {
 
 		// Create the interval if it doesn't exist
 		if (interval) return;
-		interval = cfx.setInterval(entityLoop, 500);
-	}
-
-	protected isEntityValid(entity: number) {
-		if (!this.isEntityIn(entity)) return false;
-		if (cfx.getEntityRoutingBucket(entity) != this.dimension) return false;
-		return true;
-	}
-
-	protected getRevelantEntities(): Array<number> {
-		const entities = new Array<number>();
-		const players = Player.all;
-
-		for (const player of players) {
-			const ped = player.ped;
-			entities.push(ped);
-		}
-
-		if (!this.playersOnly) {
-			const peds = cfx.getAllPeds();
-			for (const handle of peds) {
-				if (cfx.isPedAPlayer(handle)) continue;
-				entities.push(handle);
-			}
-
-			const vehicles = cfx.getAllVehicles();
-			const props = cfx.getAllObjects();
-
-			entities.push(...vehicles);
-			entities.push(...props);
-		}
-
-		return entities.filter((entity) => this.isEntityValid(entity));
-	}
-
-	public isEntityIn(entity: number): boolean {
-		const position = cfx.getEntityCoords(entity);
-		return this.isPointIn(position);
+		interval = cfx.setInterval(processEntities, 500);
 	}
 
 	public destroy(): void {
