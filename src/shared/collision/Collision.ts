@@ -90,6 +90,7 @@ export abstract class Collision extends WordObject {
 		const isSameDimension = this.dimension === dimension;
 		const isInside = this.shape.isPointIn(pos);
         
+		if (isInside && isSameDimension) {
 			if (!this.collidingEntities.has(entity)) {
 				this.collidingEntities.add(entity);
 				this.listeners.enter.broadcast(entity);
@@ -100,9 +101,5 @@ export abstract class Collision extends WordObject {
 				this.listeners.exit.broadcast(entity);
 			}
 		}
-	}
-
-	public isPointIn(pos: Vector3): boolean {
-		return this.shape.isPointIn(pos);
 	}
 }
