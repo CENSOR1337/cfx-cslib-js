@@ -88,9 +88,8 @@ export abstract class Collision extends WordObject {
 		if (this.destroyed) return;
 
 		const isSameDimension = this.dimension === dimension;
-		const isInside = this.isPointIn(pos) && isSameDimension;
-
-		if (isInside) {
+		const isInside = this.shape.isPointIn(pos);
+        
 			if (!this.collidingEntities.has(entity)) {
 				this.collidingEntities.add(entity);
 				this.listeners.enter.broadcast(entity);
