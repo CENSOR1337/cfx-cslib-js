@@ -70,13 +70,15 @@ export abstract class Collision extends WordObject {
 	}
 
 	public destroy() {
+        this.destroyed = true;
+
 		// Clear all listeners and entities
 		for (const handle of this.collidingEntities) {
 			this.listeners.exit.broadcast(handle);
 		}
 		this.collidingEntities.clear();
 
-		this.destroyed = true;
+        // Remove instance from all
 		const index = Collision.all.indexOf(this);
 		if (index < 0) return;
 		Collision.all.splice(index, 1);
