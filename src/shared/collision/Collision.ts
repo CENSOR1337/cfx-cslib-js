@@ -84,9 +84,10 @@ export abstract class Collision extends WordObject {
 
 	protected processEntity(dimension: number, entity: number, pos: Vector3) {
 		if (this.destroyed) return;
-		if (dimension != this.dimension) return;
 
-		const isInside = this.isPointIn(pos);
+		const isSameDimension = this.dimension === dimension;
+		const isInside = this.isPointIn(pos) && isSameDimension;
+
 		if (isInside) {
 			if (!this.insideEntities.has(entity)) {
 				this.insideEntities.add(entity);
