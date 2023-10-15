@@ -70,7 +70,7 @@ export abstract class Collision extends WordObject {
 	}
 
 	public destroy() {
-        this.destroyed = true;
+		this.destroyed = true;
 
 		// Clear all listeners and entities
 		for (const handle of this.collidingEntities) {
@@ -78,7 +78,7 @@ export abstract class Collision extends WordObject {
 		}
 		this.collidingEntities.clear();
 
-        // Remove instance from all
+		// Remove instance from all
 		const index = Collision.all.indexOf(this);
 		if (index < 0) return;
 		Collision.all.splice(index, 1);
@@ -89,7 +89,7 @@ export abstract class Collision extends WordObject {
 
 		const isSameDimension = this.dimension === dimension;
 		const isInside = this.shape.isPointIn(pos);
-        
+
 		if (isInside && isSameDimension) {
 			if (!this.collidingEntities.has(entity)) {
 				this.collidingEntities.add(entity);
