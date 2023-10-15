@@ -9,7 +9,10 @@ import * as cfx from "@censor1337/cfx-api/server";
 
 let interval: Timer | undefined;
 
-const entityDispatcher = new Dispatcher<[number, number, Vector3, string]>();
+const dispatchers = {
+	validateEntities: new Dispatcher<[Array<number>]>(),
+	processEntity: new Dispatcher<[number, number, Vector3, string]>(),
+};
 
 function processEntities() {
 	const playersOnly = Collision.all.every((collision) => collision.playersOnly);
@@ -17,7 +20,8 @@ function processEntities() {
 
 	const peds = playersOnly ? Player.all.map((player) => player.ped) : cfx.getAllPeds();
 	for (const ped of peds) {
-		entities.push({ handle: ped, type: "ped" });
+		const pedType = cfx.isPedAPlayer(ped) ? "player" : "ped";
+		entities.push({ handle: ped, type: pedType });
 	}
 
 	if (!playersOnly) {
@@ -32,27 +36,19 @@ function processEntities() {
 		}
 	}
 
+	dispatchers.validateEntities.broadcast(entities.map((entity) => entity.handle));
 	for (const entity of entities) {
 		const pos = cfx.getEntityCoords(entity.handle);
 		const dimension = cfx.getEntityRoutingBucket(entity.handle);
-		entityDispatcher.broadcast(dimension, entity.handle, pos, entity.type);
+		dispatchers.processEntity.broadcast(dimension, entity.handle, pos, entity.type);
 	}
 }
 
 export class Collision extends CollisionBase {
-	private readonly entityPatcherId: number;
-
 	constructor(shape: Shape, relevantOnly: boolean) {
 		const id = randomUUID();
-		super(id, shape, relevantOnly);
+		super(id, shape, relevantOnly, dispatchers);
 
-		// Add the entity dispatcher
-		this.entityPatcherId = entityDispatcher.add((dimension: number, entity: number, pos: Vector3, type: string) => {
-			if (this.playersOnly && type != "ped") return;
-			this.processEntity(dimension, entity, pos);
-		});
-
-		if (this.isRelevantOnly) return;
 		// Create the interval if it doesn't exist
 		if (interval) return;
 		interval = cfx.setInterval(processEntities, 500);
@@ -63,8 +59,7 @@ export class Collision extends CollisionBase {
 
 		// Destroy the interval if there are no more collisions
 		if (!interval) return;
-		entityDispatcher.remove(this.entityPatcherId);
-		if (entityDispatcher.size > 0) return;
+		if (dispatchers.validateEntities.size > 0) return;
 		cfx.clearInterval(interval);
 		interval = undefined;
 	}

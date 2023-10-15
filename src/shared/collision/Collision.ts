@@ -25,12 +25,26 @@ export abstract class Collision extends WordObject {
 	private overlapTick: Timer | undefined;
 	private interval: Timer | undefined;
 	public readonly isRelevantOnly: boolean;
+	private readonly dispatcherIds: { validateEntities: number; processEntity: number } | undefined;
+	private readonly dispatchers: {
+		validateEntities: Dispatcher<[Array<number>]>;
+		processEntity: Dispatcher<[number, number, Vector3, string]>;
+	};
 
-	protected constructor(id: string, shape: Shape, relevantOnly: boolean) {
+	protected constructor(
+		id: string,
+		shape: Shape,
+		relevantOnly: boolean,
+		dispatchers: {
+			validateEntities: Dispatcher<[Array<number>]>;
+			processEntity: Dispatcher<[number, number, Vector3, string]>;
+		}
+	) {
 		super(shape.pos);
 		this.shape = shape;
 		this.id = id;
 		this.isRelevantOnly = relevantOnly;
+		this.dispatchers = dispatchers;
 
 		if (this.isRelevantOnly) {
 			const delayMs = isServer ? 500 : 250;
@@ -41,6 +55,13 @@ export abstract class Collision extends WordObject {
 					this.processEntity(entity.dimension, entity.entity, entity.pos);
 				}
 			}, delayMs);
+		} else {
+			const onValidateEntities = dispatchers.validateEntities.add(this.validateEntities.bind(this));
+			const onProcessEntity = dispatchers.processEntity.add((dimension: number, entity: number, pos: Vector3, type: string) => {
+				if (this.playersOnly && type != "player") return;
+				this.processEntity(dimension, entity, pos);
+			});
+			this.dispatcherIds = { validateEntities: onValidateEntities, processEntity: onProcessEntity };
 		}
 
 		Collision.all.push(this);
@@ -87,7 +108,16 @@ export abstract class Collision extends WordObject {
 	public destroy() {
 		this.destroyed = true;
 
-		if (this.interval) clearInterval(this.interval);
+		// clear dispatcher listeners
+		if (this.dispatcherIds) {
+			this.dispatchers.validateEntities.remove(this.dispatcherIds.validateEntities);
+			this.dispatchers.processEntity.remove(this.dispatcherIds.processEntity);
+		}
+
+		// Clear interval if it exists
+		if (this.interval) {
+			clearInterval(this.interval);
+		}
 
 		// Clear all listeners and entities
 		for (const handle of this.collidingEntities) {
@@ -97,8 +127,9 @@ export abstract class Collision extends WordObject {
 
 		// Remove instance from all
 		const index = Collision.all.indexOf(this);
-		if (index < 0) return;
-		Collision.all.splice(index, 1);
+		if (index >= 0) {
+			Collision.all.splice(index, 1);
+		}
 	}
 
 	protected validateEntities(entities: Array<number>) {
