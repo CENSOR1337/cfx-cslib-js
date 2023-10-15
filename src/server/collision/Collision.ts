@@ -15,19 +15,12 @@ function processEntities() {
 	const playersOnly = Collision.all.every((collision) => collision.playersOnly);
 	const entities = new Array<{ handle: number; type: string }>();
 
-	const players = Player.all;
-	for (const player of players) {
-		const ped = player.ped;
-		entities.push({ handle: ped, type: "player" });
+	const peds = playersOnly ? Player.all.map((player) => player.ped) : cfx.getAllPeds();
+	for (const ped of peds) {
+		entities.push({ handle: ped, type: "ped" });
 	}
 
 	if (!playersOnly) {
-		const peds = cfx.getAllPeds();
-		for (const ped of peds) {
-			if (cfx.isPedAPlayer(ped)) continue;
-			entities.push({ handle: ped, type: "ped" });
-		}
-
 		const vehicles = cfx.getAllVehicles();
 		for (const vehicle of vehicles) {
 			entities.push({ handle: vehicle, type: "veh" });
