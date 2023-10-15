@@ -23,11 +23,26 @@ export abstract class Collision extends WordObject {
 	};
 	protected readonly shape: Shape;
 	private overlapTick: Timer | undefined;
+	private interval: Timer | undefined;
+	public readonly isRelevantOnly: boolean;
 
-	protected constructor(id: string, shape: Shape) {
+	protected constructor(id: string, shape: Shape, relevantOnly: boolean) {
 		super(shape.pos);
 		this.shape = shape;
 		this.id = id;
+		this.isRelevantOnly = relevantOnly;
+
+		if (this.isRelevantOnly) {
+			const delayMs = isServer ? 500 : 250;
+			this.interval = setInterval(() => {
+				const entities = this.getRelevantEntities();
+				this.validateEntities(entities.map((entity) => entity.entity));
+				for (const entity of entities) {
+					this.processEntity(entity.dimension, entity.entity, entity.pos);
+				}
+			}, delayMs);
+		}
+
 		Collision.all.push(this);
 	}
 
@@ -72,6 +87,8 @@ export abstract class Collision extends WordObject {
 	public destroy() {
 		this.destroyed = true;
 
+		if (this.interval) clearInterval(this.interval);
+
 		// Clear all listeners and entities
 		for (const handle of this.collidingEntities) {
 			this.listeners.exit.broadcast(handle);
@@ -102,4 +119,6 @@ export abstract class Collision extends WordObject {
 			}
 		}
 	}
+
+	protected abstract getRelevantEntities(): Array<{ dimension: number; entity: number; pos: Vector3 }>;
 }

@@ -42,9 +42,9 @@ function processEntities() {
 export class Collision extends CollisionBase {
 	private readonly entityPatcherId: number;
 
-	constructor(shape: Shape) {
+	constructor(shape: Shape, relevantOnly: boolean) {
 		const id = randomUUID();
-		super(id, shape);
+		super(id, shape, relevantOnly);
 
 		// Add the entity dispatcher
 		this.entityPatcherId = entityDispatcher.add((dimension: number, entity: number, pos: Vector3, type: string) => {
@@ -52,6 +52,7 @@ export class Collision extends CollisionBase {
 			this.processEntity(dimension, entity, pos);
 		});
 
+		if (this.isRelevantOnly) return;
 		// Create the interval if it doesn't exist
 		if (interval) return;
 		interval = cfx.setInterval(processEntities, 500);
@@ -66,5 +67,9 @@ export class Collision extends CollisionBase {
 		if (entityDispatcher.size > 0) return;
 		cfx.clearInterval(interval);
 		interval = undefined;
+	}
+
+	protected getRelevantEntities(): Array<{ dimension: number; entity: number; pos: Vector3 }> {
+		return [];
 	}
 }
