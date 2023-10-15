@@ -14,7 +14,6 @@ export abstract class Collision extends WordObject {
 	public static readonly all = new Array<Collision>();
 	public playersOnly: boolean = false;
 	public readonly id: string;
-	private interval: Timer;
 	private insideEntities: Set<number> = new Set();
 	private destroyed: boolean = false;
 	private listeners = {
@@ -29,8 +28,6 @@ export abstract class Collision extends WordObject {
 		super(shape.pos);
 		this.shape = shape;
 		this.id = id;
-		this.interval = setInterval(this.onTick.bind(this), isServer ? 500 : 250);
-		setTimeout(this.onTick.bind(this));
 		Collision.all.push(this);
 	}
 
@@ -73,45 +70,33 @@ export abstract class Collision extends WordObject {
 	}
 
 	public destroy() {
+		// Clear all listeners and entities
+		for (const handle of this.insideEntities) {
+			this.listeners.exit.broadcast(handle);
+		}
+		this.insideEntities.clear();
+
 		this.destroyed = true;
-		this.onTick();
 		const index = Collision.all.indexOf(this);
 		if (index < 0) return;
 		Collision.all.splice(index, 1);
 	}
 
-	private onTick() {
-		if (this.destroyed) {
-			clearInterval(this.interval);
-			for (const handle of this.insideEntities) {
-				this.listeners.exit.broadcast(handle);
+	protected checkEntity(dimension: number, entity: number, pos: Vector3) {
+		if (this.destroyed) return;
+		if (dimension != this.dimension) return;
+
+		const isInside = this.isPointIn(pos);
+		if (isInside) {
+			if (!this.insideEntities.has(entity)) {
+				this.insideEntities.add(entity);
+				this.listeners.enter.broadcast(entity);
 			}
-			this.insideEntities.clear();
-			return;
-		}
-
-		const entities = this.getRevelantEntities();
-
-		for (const handle of this.insideEntities) {
-			let isPendingDelete = false;
-			const isRelevant = entities.includes(handle);
-			isPendingDelete = !isRelevant;
-
-			if (!isPendingDelete) {
-				const isInside = this.isEntityIn(handle);
-				isPendingDelete = !isInside;
+		} else {
+			if (this.insideEntities.has(entity)) {
+				this.insideEntities.delete(entity);
+				this.listeners.exit.broadcast(entity);
 			}
-
-			if (isPendingDelete) {
-				this.insideEntities.delete(handle);
-				this.listeners.exit.broadcast(handle);
-			}
-		}
-
-		for (const handle of entities) {
-			if (this.insideEntities.has(handle)) continue;
-			this.insideEntities.add(handle);
-			this.listeners.enter.broadcast(handle);
 		}
 	}
 
