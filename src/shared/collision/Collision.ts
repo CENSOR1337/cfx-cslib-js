@@ -101,6 +101,14 @@ export abstract class Collision extends WordObject {
 		Collision.all.splice(index, 1);
 	}
 
+	protected validateEntities(entities: Array<number>) {
+		for (const entity of this.collidingEntities) {
+			if (entities.includes(entity)) continue;
+			this.collidingEntities.delete(entity);
+			this.listeners.exit.broadcast(entity);
+		}
+	}
+
 	protected processEntity(dimension: number, entity: number, pos: Vector3) {
 		if (this.destroyed) return;
 
