@@ -56,7 +56,7 @@ export class Collision extends CollisionBase {
 		// Add the entity dispatcher
 		this.entityPatcherId = entityDispatcher.add((dimension: number, entity: number, pos: Vector3, type: string) => {
 			if (this.playersOnly && type != "player") return;
-			this.checkEntity(dimension, entity, pos);
+			this.processEntity(dimension, entity, pos);
 		});
 
 		// Create the interval if it doesn't exist

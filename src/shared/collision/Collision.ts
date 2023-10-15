@@ -82,7 +82,7 @@ export abstract class Collision extends WordObject {
 		Collision.all.splice(index, 1);
 	}
 
-	protected checkEntity(dimension: number, entity: number, pos: Vector3) {
+	protected processEntity(dimension: number, entity: number, pos: Vector3) {
 		if (this.destroyed) return;
 		if (dimension != this.dimension) return;
 
