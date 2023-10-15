@@ -3,10 +3,11 @@ class Dispatcher<Args extends any[]> {
 	private listeners: Map<number, (...args: Args) => void> = new Map();
 	private _destroyed = false;
 
-	public add(listener: (...args: Args) => void): number | undefined {
-		if (this._destroyed) return undefined;
+	public add(listener: (...args: Args) => void): number {
 		this.listenerId++;
-		this.listeners.set(this.listenerId, listener);
+		if (!this._destroyed) {
+			this.listeners.set(this.listenerId, listener);
+		}
 		return this.listenerId;
 	}
 
