@@ -14,7 +14,7 @@ export abstract class Collision extends WordObject {
 	public static readonly all = new Array<Collision>();
 	public playersOnly: boolean = false;
 	public readonly id: string;
-	private insideEntities: Set<number> = new Set();
+	private collidingEntities: Set<number> = new Set();
 	private destroyed: boolean = false;
 	private listeners = {
 		enter: new Dispatcher(),
@@ -42,7 +42,7 @@ export abstract class Collision extends WordObject {
 		// start tick if not already started
 		if (!this.overlapTick) {
 			this.overlapTick = everyTick(() => {
-				for (const handle of this.insideEntities) {
+				for (const handle of this.collidingEntities) {
 					this.listeners.overlapping.broadcast(handle);
 				}
 			});
@@ -71,10 +71,10 @@ export abstract class Collision extends WordObject {
 
 	public destroy() {
 		// Clear all listeners and entities
-		for (const handle of this.insideEntities) {
+		for (const handle of this.collidingEntities) {
 			this.listeners.exit.broadcast(handle);
 		}
-		this.insideEntities.clear();
+		this.collidingEntities.clear();
 
 		this.destroyed = true;
 		const index = Collision.all.indexOf(this);
@@ -89,13 +89,13 @@ export abstract class Collision extends WordObject {
 		const isInside = this.isPointIn(pos) && isSameDimension;
 
 		if (isInside) {
-			if (!this.insideEntities.has(entity)) {
-				this.insideEntities.add(entity);
+			if (!this.collidingEntities.has(entity)) {
+				this.collidingEntities.add(entity);
 				this.listeners.enter.broadcast(entity);
 			}
 		} else {
-			if (this.insideEntities.has(entity)) {
-				this.insideEntities.delete(entity);
+			if (this.collidingEntities.has(entity)) {
+				this.collidingEntities.delete(entity);
 				this.listeners.exit.broadcast(entity);
 			}
 		}
