@@ -48,7 +48,7 @@ export class Collision extends CollisionBase {
 
 		// Add the entity dispatcher
 		this.entityPatcherId = entityDispatcher.add((dimension: number, entity: number, pos: Vector3, type: string) => {
-			if (this.playersOnly && type != "player") return;
+			if (this.playersOnly && type != "ped") return;
 			this.processEntity(dimension, entity, pos);
 		});
 
