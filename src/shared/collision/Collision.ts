@@ -5,6 +5,11 @@ import { Shape } from "../Shape";
 import { Timer, setTimeout, setInterval, clearInterval, everyTick, clearTick } from "@censor1337/cfx-api/shared";
 import { isServer } from "@censor1337/cfx-api/shared";
 
+export interface ICollisionDispatcher {
+	validateEntities: Dispatcher<[Array<number>]>;
+	processEntity: Dispatcher<[number, number, Vector3, string]>;
+}
+
 interface listenerType {
 	id: number | undefined;
 	type: "enter" | "exit" | "overlapping";
@@ -26,20 +31,9 @@ export abstract class Collision extends WordObject {
 	private interval: Timer | undefined;
 	public readonly isRelevantOnly: boolean;
 	private readonly dispatcherIds: { validateEntities: number; processEntity: number } | undefined;
-	private readonly dispatchers: {
-		validateEntities: Dispatcher<[Array<number>]>;
-		processEntity: Dispatcher<[number, number, Vector3, string]>;
-	};
+	private readonly dispatchers: ICollisionDispatcher;
 
-	protected constructor(
-		id: string,
-		shape: Shape,
-		relevantOnly: boolean,
-		dispatchers: {
-			validateEntities: Dispatcher<[Array<number>]>;
-			processEntity: Dispatcher<[number, number, Vector3, string]>;
-		}
-	) {
+	protected constructor(id: string, shape: Shape, relevantOnly: boolean, dispatchers: ICollisionDispatcher) {
 		super(shape.pos);
 		this.shape = shape;
 		this.id = id;

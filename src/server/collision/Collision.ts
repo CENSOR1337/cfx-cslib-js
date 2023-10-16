@@ -6,13 +6,14 @@ import { Shape } from "../../shared";
 import { Timer } from "@censor1337/cfx-api/server";
 import { Dispatcher } from "../../shared";
 import * as cfx from "@censor1337/cfx-api/server";
+import { ICollisionDispatcher } from "../../shared/collision/Collision";
 
 let interval: Timer | undefined;
 
 const dispatchers = {
 	validateEntities: new Dispatcher<[Array<number>]>(),
 	processEntity: new Dispatcher<[number, number, Vector3, string]>(),
-};
+} as ICollisionDispatcher;
 
 function processEntities() {
 	const playersOnly = Collision.all.every((collision) => collision.playersOnly);
