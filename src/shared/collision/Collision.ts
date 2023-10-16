@@ -126,7 +126,7 @@ export abstract class Collision extends WordObject {
 		}
 	}
 
-	protected validateEntities(entities: Array<number>) {
+	private validateEntities(entities: Array<number>) {
 		for (const entity of this.collidingEntities) {
 			if (entities.includes(entity)) continue;
 			this.collidingEntities.delete(entity);
@@ -134,7 +134,7 @@ export abstract class Collision extends WordObject {
 		}
 	}
 
-	protected processEntity(dimension: number, entity: number, pos: Vector3) {
+	private processEntity(dimension: number, entity: number, pos: Vector3) {
 		if (this.destroyed) return;
 
 		const isSameDimension = this.dimension === dimension;
