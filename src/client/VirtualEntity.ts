@@ -15,13 +15,12 @@ export class VirtualEntity extends SharedVirtualEntity {
         onStreamOut: new Dispatcher(),
     };
 
-    protected constructor(veType: string, id: string, pos: Vector3, syncedMeta: Record<string, any>) {
+    private constructor(veType: string, id: string, pos: Vector3, syncedMeta: Record<string, any>) {
         super(veType, pos);
         this.id = id;
         this.pos = new Vector3(pos.x, pos.y, pos.z);
         this.syncedMeta = syncedMeta;
         this.events.push(Resource.onServer(this.event.onVirtualEntitySyncedMetaChange, this.updateSyncedMeta.bind(this)));
-        if (id == "VE_TEMP_INSTANCE") return;
         VirtualEntity.instances.set(this.id, this);
         Resource.onResourceStop(this.destroy.bind(this));
         this.onStreamIn();
