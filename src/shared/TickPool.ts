@@ -1,4 +1,3 @@
-import * as cfx from "@censor1337/cfx-api/shared";
 import { Timer, onTick, clearTick } from "@censor1337/cfx-api/shared";
 
 class Tickpool {
@@ -20,7 +19,7 @@ class Tickpool {
         this.handlers.set(this.currentId, handler);
         if (!this.tick) {
             this.tick = onTick(() => {
-                for (const [id, handler] of this.handlers) {
+                for (const [_id, handler] of this.handlers) {
                     handler();
                 }
             });

@@ -1,16 +1,18 @@
 import * as natives from "@censor1337/cfx-core/natives";
 
-function internalRequest(classObj: any, requestFunction: Function, ...args: any[]): Promise<void> {
-    return new Promise(async (resolve, reject) => {
+function internalRequest(classObj: any, requestFunction: (...args: any[]) => void, ...args: any[]): Promise<void> {
+    return new Promise((resolve, reject) => {
         if (classObj.hasLoaded(...args)) {
             resolve();
         }
         if (classObj.isValid(...args)) {
             requestFunction(...args);
-            while (!classObj.hasLoaded(...args)) {
-                await new Promise((resolve) => setTimeout(resolve, 100));
-            }
-            resolve();
+            const interval = setInterval(() => {
+                if (classObj.hasLoaded(...args)) {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, 100);
         } else {
             reject(`${classObj.constructor.name}, ${args} is not valid`);
         }
@@ -67,7 +69,7 @@ class Ptfx {
     }
 
     public static isValid(fxName: string): boolean {
-        return true; // Can't find a native for this
+        return fxName == fxName; // Can't find a native for this
     }
 }
 

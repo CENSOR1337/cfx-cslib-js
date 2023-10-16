@@ -5,7 +5,7 @@ import { Callback as CallbackShared } from "../shared/Callback";
 export class Callback extends CallbackShared {
     public static emit<T>(eventName: string, source: number, ...args: any[]): Promise<T> {
         const cbId = randomUUID();
-        const promise = new Promise<T>((resolve, reject) => {
+        const promise = new Promise<T>((resolve) => {
             Event.onceClient(cbId, (source: number, data: any) => {
                 resolve(data as T);
             });

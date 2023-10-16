@@ -27,17 +27,17 @@ export class VirtualEntity extends SharedVirtualEntity {
         this.onStreamIn();
     }
 
-    protected onStreamIn() {} // implement this in your class
+    protected onStreamIn(): void {} // implement this in your class
 
-    protected onStreamOut() {} // implement this in your class
+    protected onStreamOut(): void {} // implement this in your class
 
-    protected onSyncedMetaChange(key: string, value: any) {} // implement this in your class
+    protected onSyncedMetaChange(_key: string, _value: any): void {} // implement this in your class
 
     public getSyncedMeta(key: string): any {
         return this.syncedMeta[key];
     }
 
-    private updateSyncedMeta(id: string, key: string, value: any) {
+    private updateSyncedMeta(id: string, key: string, value: any): void {
         if (id !== this.id) return;
         this.syncedMeta[key] = value;
         this.onSyncedMetaChange(key, value);

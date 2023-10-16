@@ -18,7 +18,7 @@ class RandomPool<V> {
 
     private calculateCumulative(): void {
         let cumulative = 0;
-        for (const [id, item] of this.itemMap) {
+        for (const [_id, item] of this.itemMap) {
             cumulative += item.probability;
         }
         this._cumulative = cumulative;
@@ -43,7 +43,7 @@ class RandomPool<V> {
         if (this.cumulative == 0) return undefined;
         const randVal = Math.random() * this.cumulative;
         let cumulative = 0;
-        for (const [id, item] of this.itemMap) {
+        for (const [_id, item] of this.itemMap) {
             cumulative += item.probability;
             if (randVal <= cumulative) {
                 return item.value;

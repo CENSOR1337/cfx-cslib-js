@@ -1,9 +1,8 @@
-import { Vector3, Event, ServerEvent, ServerEventContext } from "@censor1337/cfx-api/server";
+import { Vector3, ServerEvent, ServerEventContext } from "@censor1337/cfx-api/server";
 import { VirtualEntity as SharedVirtualEntity } from "../shared/VirtualEntity";
 import { CollisionSphere } from "./collision/CollisionSphere";
 import { randomUUID } from "./utils/uuid";
 import { Resource } from "./Resource";
-import { Player } from "./entities/Player";
 import * as cfx from "@censor1337/cfx-api/server";
 
 export class VirtualEntity extends SharedVirtualEntity {
@@ -58,7 +57,7 @@ export class VirtualEntity extends SharedVirtualEntity {
         Resource.emitClient(this.event.onVirtualEntityStreamOut, src, data);
     }
 
-    private onPlayerDisconnected({ source, reason }: ServerEventContext.playerDropped) {
+    private onPlayerDisconnected({ source }: ServerEventContext.playerDropped) {
         if (!this.streamingPlayers.has(source)) return;
         this.streamingPlayers.delete(source);
     }

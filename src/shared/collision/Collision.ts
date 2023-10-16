@@ -2,7 +2,7 @@ import { WordObject } from "../WordObject";
 import { Vector3 } from "@censor1337/cfx-api/shared";
 import { Dispatcher } from "../utils/Dispatcher";
 import { Shape } from "../Shape";
-import { Timer, setTimeout, setInterval, clearInterval, everyTick, clearTick } from "@censor1337/cfx-api/shared";
+import { Timer, setInterval, clearInterval, everyTick, clearTick } from "@censor1337/cfx-api/shared";
 import { isServer } from "@censor1337/cfx-api/shared";
 
 export interface ICollisionDispatcher {
