@@ -4,7 +4,7 @@ import { VirtualEntity as SharedVirtualEntity } from "../shared/VirtualEntity";
 import { Dispatcher } from "../shared/utils/Dispatcher";
 import { VirtualEntityEvent } from "../shared/VirtualEntity";
 
-export class VirtualEntity extends SharedVirtualEntity {
+export abstract class VirtualEntity extends SharedVirtualEntity {
     public static readonly instances = new Map<string, VirtualEntity>();
     readonly id: string;
     readonly pos: Vector3;
@@ -25,12 +25,6 @@ export class VirtualEntity extends SharedVirtualEntity {
         Resource.onResourceStop(this.destroy.bind(this));
         this.onStreamIn();
     }
-
-    protected onStreamIn(): void {} // implement this in your class
-
-    protected onStreamOut(): void {} // implement this in your class
-
-    protected onSyncedMetaChange(_key: string, _value: any): void {} // implement this in your class
 
     public getSyncedMeta(key: string): any {
         return this.syncedMeta[key];
@@ -71,4 +65,8 @@ export class VirtualEntity extends SharedVirtualEntity {
             instance.destroy();
         });
     }
+
+    protected onSyncedMetaChange(_key: string, _value: any): void {}
+    protected abstract onStreamIn(): void;
+    protected abstract onStreamOut(): void;
 }
