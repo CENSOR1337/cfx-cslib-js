@@ -15,7 +15,7 @@ export class VirtualEntity extends SharedVirtualEntity {
         onStreamOut: new Dispatcher(),
     };
 
-    private constructor(veType: string, id: string, pos: Vector3, syncedMeta: Record<string, any>) {
+    protected constructor(veType: string, id: string, pos: Vector3, syncedMeta: Record<string, any>) {
         super(veType, pos);
         this.id = id;
         this.pos = new Vector3(pos.x, pos.y, pos.z);
