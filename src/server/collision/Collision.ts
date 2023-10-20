@@ -5,50 +5,50 @@ import { Player } from "../entities/Player";
 import { Shape } from "../../shared";
 import { Timer } from "@censor1337/cfx-api/server";
 import { Dispatcher } from "../../shared";
+import { ICollisionEntity } from "../../shared/collision/Collision";
 import * as cfx from "@censor1337/cfx-api/server";
-import { ICollisionDispatcher } from "../../shared/collision/Collision";
 
 let interval: Timer | undefined;
+const FOnProcessEntities = new Dispatcher<[Map<number, ICollisionEntity>]>();
 
-const dispatchers = {
-    validateEntities: new Dispatcher<[Array<number>]>(),
-    processEntity: new Dispatcher<[number, number, Vector3, string]>(),
-} as ICollisionDispatcher;
+function getNonPlayerPeds(): Array<number> {
+    const gamePeds = cfx.getAllPeds() as Array<number>;
+    return gamePeds.filter((ped: number) => !cfx.isPedAPlayer(ped));
+}
 
 function processEntities() {
     const playersOnly = Collision.all.every((collision) => collision.playersOnly);
-    const entities = new Array<{ handle: number; type: string }>();
+    const entitiesToProcess = new Map<number, ICollisionEntity>();
+    const entityies = new Map<string, Array<number>>();
 
-    const peds = playersOnly ? Player.all.map((player) => player.ped) : cfx.getAllPeds();
-    for (const ped of peds) {
-        const pedType = cfx.isPedAPlayer(ped) ? "player" : "ped";
-        entities.push({ handle: ped, type: pedType });
-    }
+    const playerPeds = Player.all.map((player) => player.ped);
+    entityies.set("player", playerPeds);
 
     if (!playersOnly) {
-        const vehicles = cfx.getAllVehicles();
-        for (const vehicle of vehicles) {
-            entities.push({ handle: vehicle, type: "veh" });
-        }
+        entityies.set("ped", getNonPlayerPeds());
+        entityies.set("veh", cfx.getAllVehicles());
+        entityies.set("prop", cfx.getAllObjects());
+    }
 
-        const props = cfx.getAllObjects();
-        for (const prop of props) {
-            entities.push({ handle: prop, type: "prop" });
+    for (const [type, entityHandles] of entityies) {
+        for (const entityHandle of entityHandles) {
+            const collisionEntity = {
+                type,
+                handle: entityHandle,
+                pos: cfx.getEntityCoords(entityHandle),
+                dimension: cfx.getEntityRoutingBucket(entityHandle),
+            };
+            entitiesToProcess.set(entityHandle, collisionEntity);
         }
     }
 
-    dispatchers.validateEntities.broadcast(entities.map((entity) => entity.handle));
-    for (const entity of entities) {
-        const pos = cfx.getEntityCoords(entity.handle);
-        const dimension = cfx.getEntityRoutingBucket(entity.handle);
-        dispatchers.processEntity.broadcast(dimension, entity.handle, pos, entity.type);
-    }
+    FOnProcessEntities.broadcast(entitiesToProcess);
 }
 
 export class Collision extends CollisionBase {
     constructor(shape: Shape, relevantOnly: boolean) {
         const id = randomUUID();
-        super(id, shape, relevantOnly, dispatchers);
+        super(id, shape, relevantOnly, FOnProcessEntities);
 
         // Create the interval if it doesn't exist
         if (interval) return;
@@ -60,7 +60,7 @@ export class Collision extends CollisionBase {
 
         // Destroy the interval if there are no more collisions
         if (!interval) return;
-        if (dispatchers.validateEntities.size > 0) return;
+        if (FOnProcessEntities.size > 0) return;
         cfx.clearInterval(interval);
         interval = undefined;
     }

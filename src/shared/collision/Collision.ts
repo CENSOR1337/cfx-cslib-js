@@ -5,9 +5,11 @@ import { Shape } from "../Shape";
 import { Timer, setInterval, clearInterval, everyTick, clearTick } from "@censor1337/cfx-api/shared";
 import { isServer } from "@censor1337/cfx-api/shared";
 
-export interface ICollisionDispatcher {
-    validateEntities: Dispatcher<[Array<number>]>;
-    processEntity: Dispatcher<[number, number, Vector3, string]>;
+export interface ICollisionEntity {
+    handle: number;
+    pos: Vector3;
+    dimension: number;
+    type?: string;
 }
 
 interface listenerType {
@@ -30,32 +32,33 @@ export abstract class Collision extends WordObject {
     private overlapTick: Timer | undefined;
     private interval: Timer | undefined;
     public readonly isRelevantOnly: boolean;
-    private readonly dispatcherIds: { validateEntities: number; processEntity: number } | undefined;
-    private readonly dispatchers: ICollisionDispatcher;
+    private readonly dispatcher: Dispatcher<[Map<number, ICollisionEntity>]>;
+    private readonly dispatcherListenerId: number | undefined;
 
-    protected constructor(id: string, shape: Shape, relevantOnly: boolean, dispatchers: ICollisionDispatcher) {
+    protected constructor(id: string, shape: Shape, relevantOnly: boolean, dispatcher: Dispatcher<[Map<number, ICollisionEntity>]>) {
         super(shape.pos);
         this.shape = shape;
         this.id = id;
         this.isRelevantOnly = relevantOnly;
-        this.dispatchers = dispatchers;
+        this.dispatcher = dispatcher;
 
         if (this.isRelevantOnly) {
             const delayMs = isServer ? 500 : 250;
             this.interval = setInterval(() => {
                 const entities = this.getRelevantEntities();
-                this.validateEntities(entities.map((entity) => entity.entity));
+                const entitiesMap = new Map<number, ICollisionEntity>();
                 for (const entity of entities) {
-                    this.processEntity(entity.dimension, entity.entity, entity.pos);
+                    entitiesMap.set(entity.entity, {
+                        handle: entity.entity,
+                        pos: entity.pos,
+                        dimension: entity.dimension,
+                    });
                 }
+                this.processEntities(entitiesMap);
             }, delayMs);
         } else {
-            const onValidateEntities = dispatchers.validateEntities.add(this.validateEntities.bind(this));
-            const onProcessEntity = dispatchers.processEntity.add((dimension: number, entity: number, pos: Vector3, type: string) => {
-                if (this.playersOnly && type != "player") return;
-                this.processEntity(dimension, entity, pos);
-            });
-            this.dispatcherIds = { validateEntities: onValidateEntities, processEntity: onProcessEntity };
+            const onValidateEntities = dispatcher.add(this.processEntities.bind(this));
+            this.dispatcherListenerId = onValidateEntities;
         }
 
         Collision.all.push(this);
@@ -103,10 +106,7 @@ export abstract class Collision extends WordObject {
         this.destroyed = true;
 
         // clear dispatcher listeners
-        if (this.dispatcherIds) {
-            this.dispatchers.validateEntities.remove(this.dispatcherIds.validateEntities);
-            this.dispatchers.processEntity.remove(this.dispatcherIds.processEntity);
-        }
+        if (this.dispatcherListenerId) this.dispatcher.remove(this.dispatcherListenerId);
 
         // Clear interval if it exists
         if (this.interval) {
@@ -126,29 +126,33 @@ export abstract class Collision extends WordObject {
         }
     }
 
-    private validateEntities(entities: Array<number>) {
-        for (const entity of this.collidingEntities) {
-            if (entities.includes(entity)) continue;
-            this.collidingEntities.delete(entity);
-            this.listeners.exit.broadcast(entity);
-        }
-    }
-
-    private processEntity(dimension: number, entity: number, pos: Vector3) {
+    private processEntities(entities: Map<number, ICollisionEntity>) {
         if (this.destroyed) return;
 
-        const isSameDimension = this.dimension === dimension;
-        const isInside = this.shape.isPointIn(pos);
+        // Remove entities that are no longer relevant
+        for (const entityHandle of this.collidingEntities) {
+            if (entities.has(entityHandle)) continue;
+            this.collidingEntities.delete(entityHandle);
+            this.listeners.exit.broadcast(entityHandle);
+        }
 
-        if (isInside && isSameDimension) {
-            if (!this.collidingEntities.has(entity)) {
-                this.collidingEntities.add(entity);
-                this.listeners.enter.broadcast(entity);
-            }
-        } else {
-            if (this.collidingEntities.has(entity)) {
-                this.collidingEntities.delete(entity);
-                this.listeners.exit.broadcast(entity);
+        // Add entities that are now relevant
+        for (const [entityHandle, entity] of entities) {
+            if (!this.isRelevantOnly && this.playersOnly && entity.type !== "player") continue;
+            const handle = entityHandle;
+            const isSameDimension = this.dimension === entity.dimension;
+            const isInside = this.shape.isPointIn(entity.pos);
+
+            if (isInside && isSameDimension) {
+                if (!this.collidingEntities.has(handle)) {
+                    this.collidingEntities.add(handle);
+                    this.listeners.enter.broadcast(handle);
+                }
+            } else {
+                if (this.collidingEntities.has(handle)) {
+                    this.collidingEntities.delete(handle);
+                    this.listeners.exit.broadcast(handle);
+                }
             }
         }
     }
