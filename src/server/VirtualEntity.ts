@@ -50,9 +50,9 @@ export class VirtualEntity extends SharedVirtualEntity {
     }
 
     private onLeaveStreamingRange(entity: number) {
-        if (!cfx.doesEntityExist(entity)) return;
         const src = cfx.networkGetEntityOwner(entity);
         this.streamingPlayers.delete(src);
+        if (!cfx.doesEntityExist(entity)) return;
         const data = this.getSyncData();
         Resource.emitClient(this.event.onVirtualEntityStreamOut, src, data);
     }
