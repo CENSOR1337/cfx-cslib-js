@@ -21,7 +21,13 @@ function processEntities() {
     const entitiesToProcess = new Map<number, ICollisionEntity>();
     const entityies = new Map<string, Array<number>>();
 
-    const playerPeds = Player.all.map((player) => player.ped);
+    const players = Player.all;
+    const playerPeds = [];
+    for (const player of players) {
+        const ped = player.ped;
+        if (!cfx.doesEntityExist(ped)) continue;
+        playerPeds.push(ped);
+    }
     entityies.set("player", playerPeds);
 
     if (!playersOnly) {
