@@ -25,6 +25,7 @@ export class VirtualEntity extends SharedVirtualEntity {
 
     public destroy() {
         this.collision.destroy();
+        super.destroy();
     }
 
     public setSyncedMeta(key: string, value: any) {

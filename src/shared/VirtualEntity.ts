@@ -19,6 +19,7 @@ export class VirtualEntity extends WordObject {
     public readonly type = "VIRTUAL_ENTITY";
     protected readonly veType: string;
     public readonly event: veEvent;
+    private _destroyed = false;
 
     constructor(veType: string, pos: Vector3, dimension?: number) {
         super(pos, dimension);
@@ -29,5 +30,13 @@ export class VirtualEntity extends WordObject {
             onVirtualEntityStreamOut: `${VirtualEntityEvent.onVirtualEntityStreamOut}:${this.veType}`,
             onVirtualEntitySyncedMetaChange: `${VirtualEntityEvent.onVirtualEntitySyncedMetaChange}:${this.veType}`,
         };
+    }
+
+    public get destroyed() {
+        return this._destroyed;
+    }
+
+    public destroy() {
+        this._destroyed = true;
     }
 }

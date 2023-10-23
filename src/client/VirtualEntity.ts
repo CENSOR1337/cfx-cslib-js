@@ -40,6 +40,7 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
         this.onStreamOut();
         this.events.forEach((event) => event.destroy());
         VirtualEntity.instances.delete(this.id);
+        super.destroy();
     }
 
     public static get(obj: any): VirtualEntity | undefined {
