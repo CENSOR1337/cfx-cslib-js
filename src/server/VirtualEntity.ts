@@ -54,6 +54,7 @@ export class VirtualEntity extends SharedVirtualEntity {
         this.streamingPlayers.delete(entity);
         if (!cfx.doesEntityExist(entity)) return;
         const src = cfx.networkGetEntityOwner(entity);
+        if (!cfx.doesPlayerExist(String(src))) return;
         const data = this.getSyncData();
         Resource.emitClient(this.event.onVirtualEntityStreamOut, src, data);
     }
