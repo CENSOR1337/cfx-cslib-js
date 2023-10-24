@@ -8,7 +8,7 @@ import * as cfx from "@censor1337/cfx-api/server";
 export class VirtualEntity extends SharedVirtualEntity {
     readonly id = randomUUID();
     readonly collision: CollisionSphere;
-    readonly streamingPlayers: Set<number> = new Set();
+    readonly streamingPlayers = new Map<number, number>();
     readonly syncedMeta: Record<string, any>;
 
     constructor(veType: string, position: Vector3, streamingDistance: number, data?: Record<string, any>) {
@@ -30,7 +30,7 @@ export class VirtualEntity extends SharedVirtualEntity {
 
     public setSyncedMeta(key: string, value: any) {
         this.syncedMeta[key] = value;
-        for (const src of this.streamingPlayers) {
+        for (const [_entity, src] of this.streamingPlayers) {
             Resource.emitClient(this.event.onVirtualEntitySyncedMetaChange, src, this.id, key, value);
         }
     }
@@ -45,15 +45,15 @@ export class VirtualEntity extends SharedVirtualEntity {
 
     private onEnterStreamingRange(entity: number) {
         const src = cfx.networkGetEntityOwner(entity);
-        this.streamingPlayers.add(src);
+        this.streamingPlayers.set(entity, src);
         const data = this.getSyncData();
         Resource.emitClient(this.event.onVirtualEntityStreamIn, src, data);
     }
 
     private onLeaveStreamingRange(entity: number) {
-        const src = cfx.networkGetEntityOwner(entity);
-        this.streamingPlayers.delete(src);
+        this.streamingPlayers.delete(entity);
         if (!cfx.doesEntityExist(entity)) return;
+        const src = cfx.networkGetEntityOwner(entity);
         const data = this.getSyncData();
         Resource.emitClient(this.event.onVirtualEntityStreamOut, src, data);
     }
