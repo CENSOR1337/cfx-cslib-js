@@ -50,7 +50,7 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
     }
 
     public static initialize(veType: string, classObject: any) {
-        Resource.onServer(`${VirtualEntityEvent.onVirtualEntityStreamIn}:${veType}`, function (veObject: any) {
+        Resource.onServer(`${VirtualEntityEvent.onStreamIn}:${veType}`, function (veObject: any) {
             const id = veObject.id;
             const pos = veObject.pos;
             const syncedMeta = veObject.syncedMeta;
@@ -59,7 +59,7 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
             VirtualEntity.instances.set(id, instance);
         });
 
-        Resource.onServer(`${VirtualEntityEvent.onVirtualEntityStreamOut}:${veType}`, function (veObject: any) {
+        Resource.onServer(`${VirtualEntityEvent.onStreamOut}:${veType}`, function (veObject: any) {
             const id = veObject.id;
             const instance = VirtualEntity.instances.get(id);
             if (!instance) return;

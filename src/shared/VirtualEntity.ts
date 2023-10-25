@@ -3,9 +3,9 @@ import { WordObject } from "./WordObject";
 import { appendInternalNamespace } from "./enum";
 
 export const VirtualEntityEvent = {
-    onVirtualEntityStreamIn: appendInternalNamespace("on_ve_stream_in"),
-    onVirtualEntityStreamOut: appendInternalNamespace("on_ve_stream_out"),
-    onVirtualEntitySyncedMetaChange: appendInternalNamespace("on_ve_synced_meta_change"),
+    onStreamIn: appendInternalNamespace("on_ve_stream_in"),
+    onStreamOut: appendInternalNamespace("on_ve_stream_out"),
+    onSyncedMetaChange: appendInternalNamespace("on_ve_synced_meta_change"),
 };
 
 interface veEvent {
@@ -26,9 +26,9 @@ export class VirtualEntity extends WordObject {
         if (!veType) throw new Error("VirtualEntity must have a virtualEntityType");
         this.veType = veType;
         this.event = {
-            onVirtualEntityStreamIn: `${VirtualEntityEvent.onVirtualEntityStreamIn}:${this.veType}`,
-            onVirtualEntityStreamOut: `${VirtualEntityEvent.onVirtualEntityStreamOut}:${this.veType}`,
-            onVirtualEntitySyncedMetaChange: `${VirtualEntityEvent.onVirtualEntitySyncedMetaChange}:${this.veType}`,
+            onVirtualEntityStreamIn: `${VirtualEntityEvent.onStreamIn}:${this.veType}`,
+            onVirtualEntityStreamOut: `${VirtualEntityEvent.onStreamOut}:${this.veType}`,
+            onVirtualEntitySyncedMetaChange: `${VirtualEntityEvent.onSyncedMetaChange}:${this.veType}`,
         };
     }
 
