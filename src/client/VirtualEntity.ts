@@ -20,7 +20,8 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
         this.id = id;
         this.pos = new Vector3(pos.x, pos.y, pos.z);
         this.syncedMeta = syncedMeta;
-        this.events.push(Resource.onServer(this.event.onVirtualEntitySyncedMetaChange, this.updateSyncedMeta.bind(this)));
+        this.events.push(Resource.onServer(`${VirtualEntityEvent.onSyncedMetaChange}:${this.id}`, this.updateSyncedMeta.bind(this)));
+        this.events.push(Resource.onServer(`${VirtualEntityEvent.onStreamOut}:${this.id}`, this.destroy.bind(this)));
         VirtualEntity.instances.set(this.id, this);
         Resource.onResourceStop(this.destroy.bind(this));
         this.onStreamIn();
@@ -50,20 +51,13 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
     }
 
     public static initialize(veType: string, classObject: any) {
-        Resource.onServer(`${VirtualEntityEvent.onVirtualEntityStreamIn}:${veType}`, function (veObject: any) {
+        Resource.onServer(`${VirtualEntityEvent.onStreamIn}:${veType}`, function (veObject: any) {
             const id = veObject.id;
             const pos = veObject.pos;
             const syncedMeta = veObject.syncedMeta;
             if (VirtualEntity.instances.get(id)) return;
             const instance = new classObject(veType, id, pos, syncedMeta);
             VirtualEntity.instances.set(id, instance);
-        });
-
-        Resource.onServer(`${VirtualEntityEvent.onVirtualEntityStreamOut}:${veType}`, function (veObject: any) {
-            const id = veObject.id;
-            const instance = VirtualEntity.instances.get(id);
-            if (!instance) return;
-            instance.destroy();
         });
     }
 
