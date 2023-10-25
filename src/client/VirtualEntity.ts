@@ -20,7 +20,7 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
         this.id = id;
         this.pos = new Vector3(pos.x, pos.y, pos.z);
         this.syncedMeta = syncedMeta;
-        this.events.push(Resource.onServer(this.event.onVirtualEntitySyncedMetaChange, this.updateSyncedMeta.bind(this)));
+        this.events.push(Resource.onServer(`${VirtualEntityEvent.onSyncedMetaChange}:${this.veType}`, this.updateSyncedMeta.bind(this)));
         VirtualEntity.instances.set(this.id, this);
         Resource.onResourceStop(this.destroy.bind(this));
         this.onStreamIn();

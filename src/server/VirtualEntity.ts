@@ -1,5 +1,5 @@
 import { Vector3, ServerEvent, ServerEventContext } from "@censor1337/cfx-api/server";
-import { VirtualEntity as SharedVirtualEntity } from "../shared/VirtualEntity";
+import { VirtualEntity as SharedVirtualEntity, VirtualEntityEvent } from "../shared/VirtualEntity";
 import { CollisionSphere } from "./collision/CollisionSphere";
 import { randomUUID } from "./utils/uuid";
 import { Resource } from "./Resource";
@@ -31,7 +31,7 @@ export class VirtualEntity extends SharedVirtualEntity {
     public setSyncedMeta(key: string, value: any) {
         this.syncedMeta[key] = value;
         for (const [_entity, src] of this.streamingPlayers) {
-            Resource.emitClient(this.event.onVirtualEntitySyncedMetaChange, src, this.id, key, value);
+            Resource.emitClient(`${VirtualEntityEvent.onSyncedMetaChange}:${this.veType}`, src, this.id, key, value);
         }
     }
 
@@ -47,7 +47,7 @@ export class VirtualEntity extends SharedVirtualEntity {
         const src = cfx.networkGetEntityOwner(entity);
         this.streamingPlayers.set(entity, src);
         const data = this.getSyncData();
-        Resource.emitClient(this.event.onVirtualEntityStreamIn, src, data);
+        Resource.emitClient(`${VirtualEntityEvent.onStreamIn}:${this.veType}`, src, data);
     }
 
     private onLeaveStreamingRange(entity: number) {
@@ -56,7 +56,7 @@ export class VirtualEntity extends SharedVirtualEntity {
         const src = cfx.networkGetEntityOwner(entity);
         if (!cfx.doesPlayerExist(String(src))) return;
         const data = this.getSyncData();
-        Resource.emitClient(this.event.onVirtualEntityStreamOut, src, data);
+        Resource.emitClient(`${VirtualEntityEvent.onStreamOut}:${this.veType}`, src, data);
     }
 
     private onPlayerDisconnected({ source }: ServerEventContext.playerDropped) {
