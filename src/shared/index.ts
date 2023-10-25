@@ -5,6 +5,5 @@ export { VirtualEntity } from "./VirtualEntity";
 export { WordObject } from "./WordObject";
 export { Dispatcher } from "./utils/Dispatcher";
 export { Locale } from "./Locale";
-export { Entity } from "./entities";
 export { Shape, ShapeCircle, ShapeSphere, ShapeCylinder, ShapePolygon } from "./Shape";
 export { RandomPool } from "./RandomPool";
