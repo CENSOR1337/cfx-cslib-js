@@ -31,7 +31,7 @@ export class VirtualEntity extends SharedVirtualEntity {
     public setSyncedMeta(key: string, value: any) {
         this.syncedMeta[key] = value;
         for (const [_entity, src] of this.streamingPlayers) {
-            Resource.emitClient(`${VirtualEntityEvent.onSyncedMetaChange}:${this.veType}`, src, this.id, key, value);
+            Resource.emitClient(`${VirtualEntityEvent.onSyncedMetaChange}:${this.id}`, src, this.id, key, value);
         }
     }
 
@@ -56,7 +56,7 @@ export class VirtualEntity extends SharedVirtualEntity {
         const src = cfx.networkGetEntityOwner(entity);
         if (!cfx.doesPlayerExist(String(src))) return;
         const data = this.getSyncData();
-        Resource.emitClient(`${VirtualEntityEvent.onStreamOut}:${this.veType}`, src, data);
+        Resource.emitClient(`${VirtualEntityEvent.onStreamOut}:${this.id}`, src, data);
     }
 
     private onPlayerDisconnected({ source }: ServerEventContext.playerDropped) {
