@@ -1,50 +1,38 @@
 import { randomUUID } from "../utils/uuid";
 import { Vector3 } from "@censor1337/cfx-api/server";
 import { Collision as CollisionBase } from "../../shared";
-import { Player } from "../entities/Player";
 import { Shape } from "../../shared";
 import { Timer } from "@censor1337/cfx-api/server";
 import { Dispatcher } from "../../shared";
 import { ICollisionEntity } from "../../shared/collision/Collision";
+import { Player, Entity, Ped, Vehicle, Object } from "@censor1337/cfx-api/server";
 import * as cfx from "@censor1337/cfx-api/server";
 
 let interval: Timer | undefined;
 const FOnProcessEntities = new Dispatcher<[Map<number, ICollisionEntity>]>();
 
-function getNonPlayerPeds(): Array<number> {
-    const gamePeds = cfx.getAllPeds() as Array<number>;
-    return gamePeds.filter((ped: number) => !cfx.isPedAPlayer(ped));
-}
-
 function processEntities() {
     const playersOnly = Collision.all.every((collision) => collision.playersOnly);
     const entitiesToProcess = new Map<number, ICollisionEntity>();
-    const entityies = new Map<string, Array<number>>();
+    const entityies = new Map<string, Array<Entity>>();
 
-    const players = Player.all;
-    const playerPeds = [];
-    for (const player of players) {
-        const ped = player.ped;
-        if (!cfx.doesEntityExist(ped)) continue;
-        playerPeds.push(ped);
-    }
-    entityies.set("player", playerPeds);
+    entityies.set("player", Player.all);
 
     if (!playersOnly) {
-        entityies.set("ped", getNonPlayerPeds());
-        entityies.set("veh", cfx.getAllVehicles());
-        entityies.set("prop", cfx.getAllObjects());
+        entityies.set("ped", Ped.all);
+        entityies.set("veh", Vehicle.all);
+        entityies.set("prop", Object.all);
     }
 
     for (const [type, entityHandles] of entityies) {
-        for (const entityHandle of entityHandles) {
+        for (const entity of entityHandles) {
             const collisionEntity = {
                 type,
-                handle: entityHandle,
-                pos: cfx.getEntityCoords(entityHandle),
-                dimension: cfx.getEntityRoutingBucket(entityHandle),
-            };
-            entitiesToProcess.set(entityHandle, collisionEntity);
+                handle: entity.handle,
+                pos: entity.pos,
+                dimension: entity.dimension,
+            } as ICollisionEntity;
+            entitiesToProcess.set(entity.handle, collisionEntity);
         }
     }
 
