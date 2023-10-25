@@ -14,17 +14,17 @@ const FOnProcessEntities = new Dispatcher<[Map<number, ICollisionEntity>]>();
 function processEntities() {
     const playersOnly = Collision.all.every((collision) => collision.playersOnly);
     const entitiesToProcess = new Map<number, ICollisionEntity>();
-    const entityies = new Map<string, Array<Entity>>();
+    const entities = new Map<string, Array<Entity>>();
 
-    entityies.set("player", Player.all);
+    entities.set("player", Player.all);
 
     if (!playersOnly) {
-        entityies.set("ped", Ped.all);
-        entityies.set("veh", Vehicle.all);
-        entityies.set("prop", Object.all);
+        entities.set("ped", Ped.all);
+        entities.set("veh", Vehicle.all);
+        entities.set("prop", Object.all);
     }
 
-    for (const [type, entityHandles] of entityies) {
+    for (const [type, entityHandles] of entities) {
         for (const entity of entityHandles) {
             const collisionEntity = {
                 type,
