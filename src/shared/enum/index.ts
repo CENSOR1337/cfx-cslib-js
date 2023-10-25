@@ -1,4 +1,4 @@
-const namespace = "cslib:core";
+const namespace = "cslib.core";
 
 export function appendNamespace(name: string): string {
     return `${namespace}:${name}`;
