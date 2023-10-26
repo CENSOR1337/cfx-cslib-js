@@ -24,12 +24,6 @@ export class VirtualEntity extends SharedVirtualEntity {
         super.destroy();
     }
 
-    public static get(obj: any): VirtualEntity | undefined {
-        const id = typeof obj === "string" ? obj : obj.id;
-        if (!id) return undefined;
-        return VirtualEntity.instances.get(id);
-    }
-
     public static initialize(veType: string, classObject: typeof VirtualEntity) {
         Resource.onServer(`${VirtualEntityEvent.onStreamIn}:${veType}`, function (veObject: any) {
             const id = veObject.id as string;
