@@ -34,7 +34,7 @@ export class VirtualEntity extends SharedVirtualEntity {
     public setSyncedMeta(key: string, value: any) {
         this.syncedMeta[key] = value;
         for (const [_entity, src] of this.streamingPlayers) {
-            Resource.emitClient(`${VirtualEntityEvent.onSyncedMetaChange}:${this.id}`, src, this.id, key, value);
+            Resource.emitClient(`${VirtualEntityEvent.onSyncedMetaChange}:${this.id}`, src, key, value);
         }
     }
 

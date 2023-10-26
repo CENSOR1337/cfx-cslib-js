@@ -7,33 +7,20 @@ export class VirtualEntity extends SharedVirtualEntity {
     public static readonly instances = new Map<string, VirtualEntity>();
     readonly id: string;
     readonly pos: Vector3;
-    readonly syncedMeta: Record<string, any>;
-    readonly events = new Array<Event>();
+    readonly syncedMeta: Record<string, any> = {};
 
     constructor(id: string, pos: Vector3, syncedMeta: Record<string, any>) {
         super(pos);
         this.id = id;
-        this.pos = new Vector3(pos.x, pos.y, pos.z);
+        this.pos = pos;
         this.syncedMeta = syncedMeta;
-        this.events.push(Resource.onServer(`${VirtualEntityEvent.onSyncedMetaChange}:${this.id}`, this.updateSyncedMeta.bind(this)));
-        this.events.push(Resource.onServer(`${VirtualEntityEvent.onStreamOut}:${this.id}`, this.destroy.bind(this)));
-        VirtualEntity.instances.set(this.id, this);
-        Resource.onResourceStop(this.destroy.bind(this));
     }
 
     public getSyncedMeta(key: string): any {
         return this.syncedMeta[key];
     }
 
-    private updateSyncedMeta(id: string, key: string, value: any): void {
-        if (id !== this.id) return;
-        this.syncedMeta[key] = value;
-        this.onSyncedMetaChange(key, value);
-    }
-
     public destroy() {
-        this.events.forEach((event) => event.destroy());
-        VirtualEntity.instances.delete(this.id);
         super.destroy();
     }
 
@@ -45,11 +32,40 @@ export class VirtualEntity extends SharedVirtualEntity {
 
     public static initialize(veType: string, classObject: typeof VirtualEntity) {
         Resource.onServer(`${VirtualEntityEvent.onStreamIn}:${veType}`, function (veObject: any) {
-            const id = veObject.id;
-            const pos = veObject.pos;
-            const syncedMeta = veObject.syncedMeta;
+            const id = veObject.id as string;
+            const pos = new Vector3(veObject.pos.x, veObject.pos.y, veObject.pos.z);
+            const syncedMeta = veObject.syncedMeta as Record<string, any>;
+
+            // Check if instance already exists
             if (VirtualEntity.instances.get(id)) return;
+
+            // Create new instance
             const instance = new classObject(id, pos, syncedMeta);
+
+            // Array for event listeners
+            const events = new Array<Event>();
+
+            // Function for synced meta change event
+            const syncMetaChanged = (key: string, value: any) => {
+                instance.syncedMeta[key] = value;
+                instance.onSyncedMetaChange(key, value);
+            };
+
+            // Function for destroy event
+            const destroy = () => {
+                for (const event of events) event.destroy();
+                instance.destroy();
+                VirtualEntity.instances.delete(id);
+            };
+
+            // Bind synced meta change event
+            events.push(Resource.onServer(`${VirtualEntityEvent.onSyncedMetaChange}:${id}`, syncMetaChanged));
+            // Bind stream out event
+            events.push(Resource.onceServer(`${VirtualEntityEvent.onStreamOut}:${id}`, destroy));
+            // Bind resource stop event
+            events.push(Resource.onResourceStop(destroy));
+
+            // Set instance
             VirtualEntity.instances.set(id, instance);
         });
     }
