@@ -11,13 +11,10 @@ export const VirtualEntityEvent = {
 export class VirtualEntity extends WordObject {
     public static readonly type = "VIRTUAL_ENTITY";
     public readonly type = "VIRTUAL_ENTITY";
-    protected readonly veType: string;
     private _destroyed = false;
 
-    constructor(veType: string, pos: Vector3, dimension?: number) {
+    constructor(pos: Vector3, dimension?: number) {
         super(pos, dimension);
-        if (!veType) throw new Error("VirtualEntity must have a virtualEntityType");
-        this.veType = veType;
     }
 
     public get destroyed() {

@@ -3,15 +3,15 @@ import { Resource } from "./Resource";
 import { VirtualEntity as SharedVirtualEntity } from "../shared/VirtualEntity";
 import { VirtualEntityEvent } from "../shared/VirtualEntity";
 
-export abstract class VirtualEntity extends SharedVirtualEntity {
+export class VirtualEntity extends SharedVirtualEntity {
     public static readonly instances = new Map<string, VirtualEntity>();
     readonly id: string;
     readonly pos: Vector3;
     readonly syncedMeta: Record<string, any>;
     readonly events = new Array<Event>();
 
-    protected constructor(veType: string, id: string, pos: Vector3, syncedMeta: Record<string, any>) {
-        super(veType, pos);
+    constructor(id: string, pos: Vector3, syncedMeta: Record<string, any>) {
+        super(pos);
         this.id = id;
         this.pos = new Vector3(pos.x, pos.y, pos.z);
         this.syncedMeta = syncedMeta;
@@ -19,7 +19,6 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
         this.events.push(Resource.onServer(`${VirtualEntityEvent.onStreamOut}:${this.id}`, this.destroy.bind(this)));
         VirtualEntity.instances.set(this.id, this);
         Resource.onResourceStop(this.destroy.bind(this));
-        this.onStreamIn();
     }
 
     public getSyncedMeta(key: string): any {
@@ -33,7 +32,6 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
     }
 
     public destroy() {
-        this.onStreamOut();
         this.events.forEach((event) => event.destroy());
         VirtualEntity.instances.delete(this.id);
         super.destroy();
@@ -57,6 +55,4 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
     }
 
     protected onSyncedMetaChange(_key: string, _value: any): void {}
-    protected abstract onStreamIn(): void;
-    protected abstract onStreamOut(): void;
 }

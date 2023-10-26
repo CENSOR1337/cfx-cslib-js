@@ -10,9 +10,12 @@ export class VirtualEntity extends SharedVirtualEntity {
     readonly collision: CollisionSphere;
     readonly streamingPlayers = new Map<number, number>();
     readonly syncedMeta: Record<string, any>;
+    readonly veType: string;
 
     constructor(veType: string, position: Vector3, streamingDistance: number, data?: Record<string, any>) {
-        super(veType, position);
+        if (!veType) throw new Error("VirtualEntity must have a virtualEntityType");
+        super(position);
+        this.veType = veType;
         const collision = new CollisionSphere(position, streamingDistance);
         collision.playersOnly = true;
         collision.onBeginOverlap(this.onEnterStreamingRange.bind(this));
