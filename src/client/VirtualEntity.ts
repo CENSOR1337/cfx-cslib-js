@@ -43,7 +43,7 @@ export class VirtualEntity extends SharedVirtualEntity {
         return VirtualEntity.instances.get(id);
     }
 
-    public static initialize(veType: string, classObject: any) {
+    public static initialize(veType: string, classObject: typeof VirtualEntity) {
         Resource.onServer(`${VirtualEntityEvent.onStreamIn}:${veType}`, function (veObject: any) {
             const id = veObject.id;
             const pos = veObject.pos;
