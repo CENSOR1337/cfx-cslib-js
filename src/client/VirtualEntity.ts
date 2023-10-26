@@ -1,7 +1,6 @@
 import { Vector3, Event } from "@censor1337/cfx-api/client";
 import { Resource } from "./Resource";
 import { VirtualEntity as SharedVirtualEntity } from "../shared/VirtualEntity";
-import { Dispatcher } from "../shared/utils/Dispatcher";
 import { VirtualEntityEvent } from "../shared/VirtualEntity";
 
 export abstract class VirtualEntity extends SharedVirtualEntity {
@@ -10,10 +9,6 @@ export abstract class VirtualEntity extends SharedVirtualEntity {
     readonly pos: Vector3;
     readonly syncedMeta: Record<string, any>;
     readonly events = new Array<Event>();
-    private dispatchers = {
-        onStreamIn: new Dispatcher(),
-        onStreamOut: new Dispatcher(),
-    };
 
     protected constructor(veType: string, id: string, pos: Vector3, syncedMeta: Record<string, any>) {
         super(veType, pos);
